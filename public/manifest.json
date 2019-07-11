@@ -1,0 +1,13 @@
+{
+  "name": "stackit",
+  "description": "A sample collaboration app used to teach the main features of Blockstack",
+  "icons": [
+    {
+    "src": "favicon.ico",
+    "sizes": "192x192",
+    "type": "image/png"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "standalone"
+}
