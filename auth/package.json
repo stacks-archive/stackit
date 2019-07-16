@@ -9,7 +9,7 @@
   "bugs": {
     "url": "https://github.com/blockstack/stackit/issues"
   },
-  "author": "",
+  "author": "Sahana Srinivasan",
   "license": "MIT",
   "dependencies": {
     "blockstack": "^19.2.1",
