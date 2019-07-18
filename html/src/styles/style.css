@@ -1,9 +1,9 @@
 /* Globals */
 a,a:focus,a:hover{color:#fff;}
 html,body{height:100%;background-color:#F4F4FC;}
-body{color:#3700FF;text-align:center;}
+body{text-align:center;}
 .hide{display:none;}
-.landing-heading{font-family:'Source Code Pro',monospace;font-weight:400;}
+.landing-heading{font-family:'Fira Mono',monospace;}
 
 /* Buttons */
 .btn{font-family:'Source Code Pro',monospace;padding:0.5625rem 2.5rem;font-size:0.8125rem;font-weight:400;line-height:1.75rem;border-radius:0!important;-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-ms-transition:all .2s ease-in-out;-o-transition:all .2s ease-in-out;transition:all .2s ease-in-out;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
@@ -11,7 +11,6 @@ body{color:#3700FF;text-align:center;}
 .btn:focus,.btn:active:focus,.btn.active:focus{outline:none;}
 .btn-primary{background-color:#3700FF;border:1px solid #3700FF;border-radius:30px !important}
 .btn-primary:hover,.btn-primary:focus,.btn-primary:active{color:#fff;border:1px solid #270F34;background-color:#270F34;}
-.navbar{background-color:#3700FF !important;-webkit-border-radius: 0;-moz-border-radius: 0;border-radius: 0;}
 
 /* Avatar */
 .avatar{width:100px;height:100px;} 
