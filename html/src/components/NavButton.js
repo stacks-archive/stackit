@@ -11,7 +11,10 @@ export default class Button extends Component {
 
     return (
       <Link to={this.props.link} 
-                    className="btn btn-primary">{this.props.name}</Link>
+            className="btn btn-primary" 
+            id="nav-button">
+            {this.props.name}
+      </Link>
     );
   }
 }
