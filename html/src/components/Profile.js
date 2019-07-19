@@ -5,6 +5,7 @@ import {
 
 import NavBar from './NavBar'
 import SideBar from './SideBar'
+import BlockTable from './BlockTable'
 import '../styles/Profile.css'
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
@@ -34,7 +35,9 @@ export default class Profile extends Component {
           <div className="col-sm-3">
             <SideBar />
           </div>
-          <div className="col-sm-9">.col-9</div>
+          <div className="col-sm-8">
+            <BlockTable /> 
+          </div>
         </div>
       </div>
     );

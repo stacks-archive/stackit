@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../styles/NavButton.css'
 
-export default class Button extends Component {
+export default class NavButton extends Component {
   constructor(props) {
     super(props);
   }

@@ -11,8 +11,7 @@ export default class SideBar extends Component {
     return (
       <div className="col">
         <NavButton name="Create block" /> 
-        <NavButton name="View stacks" />
-        <NavButton name="Filter by stack" />
+        <NavButton name="View your stacks" />
       </div>
     );
   }
