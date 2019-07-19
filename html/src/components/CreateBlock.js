@@ -3,9 +3,8 @@ import {
   Person,
 } from 'blockstack';
 import { Switch, Route, Redirect } from 'react-router-dom'
-import SideBar from './SideBar'
-import BlockTable from './BlockTable'
-import '../styles/Profile.css'
+import { Link } from 'react-router-dom'
+import '../styles/CreateBlock.css'
 
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
@@ -28,7 +27,22 @@ export default class Dashbaord extends Component {
 
   render() {
     return (
-      <p>Hi hello create a block !</p>
+      <div>
+        <h1 className="landing-heading" id="create-heading">Create a block</h1>
+        <div className="form">
+          <form id="create-form" className="align-content-center">
+            <input type="text" className="form-control" id="block" placeholder="Block name"></input>
+            <textarea type="text" className="form-control" id="description" placeholder="Description"></textarea>
+            <label for="date">Deadline</label>
+            <input type="date" className="form-control" id="date" placeholder="Description"></input>
+            <Link to='dash'
+                  className="btn btn-primary" 
+                  id="submit">
+                  Submit
+            </Link>
+          </form>
+        </div>
+      </div>
     );
   }
 
