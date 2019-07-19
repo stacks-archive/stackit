@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 import '../styles/NavButton.css'
 
-export default class NavButton extends Component {
+export default class Button extends Component {
   constructor(props) {
     super(props);
   }
@@ -9,11 +10,8 @@ export default class NavButton extends Component {
   render() {
 
     return (
-      <button id="nav-button"
-          className="btn btn-primary btn-lg"
-      >
-          {this.props.name}
-      </button>
+      <Link to={this.props.link} 
+                    className="btn btn-primary">{this.props.name}</Link>
     );
   }
 }

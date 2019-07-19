@@ -10,8 +10,8 @@ export default class SideBar extends Component {
 
     return (
       <div className="col">
-        <NavButton name="Create block" /> 
-        <NavButton name="View your stacks" />
+        <NavButton name="Create block" link="/create"/> 
+        <NavButton name="View your stacks" link="/stacks" />
       </div>
     );
   }

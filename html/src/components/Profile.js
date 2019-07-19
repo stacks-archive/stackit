@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import {
   Person,
 } from 'blockstack';
-
+import { Switch, Route, Redirect } from 'react-router-dom'
 import NavBar from './NavBar'
-import SideBar from './SideBar'
-import BlockTable from './BlockTable'
+import Dashboard from './Dashboard'
+import CreateBlock from './CreateBlock'
+import YourStacks from './YourStacks'
 import '../styles/Profile.css'
+
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
@@ -28,17 +30,42 @@ export default class Profile extends Component {
 
   render() {
     const { person } = this.state;
+
+    if(window.location.pathname === '/') {
+      return (
+        <Redirect to='dash' />
+      )
+    }
+
     return (
-      <div className="Dashboard">
+      <div className="Profile">
         <NavBar name={person.name()} signOut={this.props.handleSignOut}/>
-        <div className="row">
-          <div className="col-sm-3">
-            <SideBar />
-          </div>
-          <div className="col-sm-8">
-            <BlockTable /> 
-          </div>
-        </div>
+        <Switch>
+          <Route
+            path='/dash'
+            render={
+              routeProps => <Dashboard
+              userSession={this.props.userSession}
+              {...routeProps} />
+            }
+          />
+          <Route
+            path='/create'
+            render={
+              routeProps => <CreateBlock
+              userSession={this.props.userSession}
+              {...routeProps} />
+            }
+          /> 
+          <Route
+            path='/stacks'
+            render={
+              routeProps => <YourStacks
+              userSession={this.props.userSession}
+              {...routeProps} />
+            }
+          />
+        </Switch>
       </div>
     );
   }
