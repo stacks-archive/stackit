@@ -10,11 +10,11 @@ export default class TableRow extends Component {
 
     return (
       <tr>
-        <th scope="row">1</th>
-        <td>Hello</td>
-        <td>Block</td>
-        <td>Testing</td>
-        <td>Testing</td>
+        <th scope="row">{this.props.index+1}</th>
+        <td>{this.props.block[0]}</td>
+        <td>{this.props.block[2]}</td>
+        <td>{this.props.block[2]}</td>
+        <td>{this.props.block[3]?'Complete':'Pending'}</td>
       </tr>
     );
   }

@@ -33,7 +33,7 @@ export default class Dashbaord extends Component {
           <SideBar />
         </div>
         <div className="col-sm-8">
-          <BlockTable /> 
+          <BlockTable blocks={this.props.blocks}  /> 
         </div>
       </div>
     );

@@ -8,6 +8,9 @@ import Dashboard from './Dashboard'
 import CreateBlock from './CreateBlock'
 import YourStacks from './YourStacks'
 import '../styles/Profile.css'
+import { BLOCKS_FILENAME } from '../constants.js'
+import {jsonCopy} from '../utils.js'
+
 
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
@@ -24,8 +27,35 @@ export default class Profile extends Component {
   	  	avatarUrl() {
   	  	  return avatarFallbackImage;
   	  	},
-  	  },
-  	};
+      },
+      blocks: [],
+    };
+    
+    this.loadTasks = this.loadTasks.bind(this)
+    this.addBlock = this.addBlock.bind(this);
+
+  }
+
+
+  loadTasks() {
+    const options = { decrypt: true };
+    this.props.userSession.getFile(BLOCKS_FILENAME, options)
+    .then((content) => {
+      if(content) {
+        const blocks = JSON.parse(content);
+        this.setState({blocks});
+        console.log(blocks);
+      } 
+    })
+  }
+
+
+  addBlock(block) {
+    const blocks = jsonCopy(this.state.blocks);
+    blocks.push(block);
+    this.setState({blocks});
+    const options = {encrypt : true};
+    this.props.userSession.putFile(BLOCKS_FILENAME, JSON.stringify(blocks), options);
   }
 
   render() {
@@ -46,6 +76,7 @@ export default class Profile extends Component {
             render={
               routeProps => <Dashboard
               userSession={this.props.userSession}
+              blocks={this.state.blocks}
               {...routeProps} />
             }
           />
@@ -54,6 +85,7 @@ export default class Profile extends Component {
             render={
               routeProps => <CreateBlock
               userSession={this.props.userSession}
+              addBlock = {this.addBlock}
               {...routeProps} />
             }
           /> 
@@ -62,6 +94,7 @@ export default class Profile extends Component {
             render={
               routeProps => <YourStacks
               userSession={this.props.userSession}
+              blocks={this.state.blocks}
               {...routeProps} />
             }
           />
@@ -75,5 +108,6 @@ export default class Profile extends Component {
     this.setState({
       person: new Person(userSession.loadUserData().profile),
     });
+    this.loadTasks();
   }
 }

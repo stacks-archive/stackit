@@ -12,15 +12,18 @@ export default class BlockTable extends Component {
     return (
       <table className="table table-hover">
         <thead className="thead">
-          <th scope="col">#</th>
-          <th scope="col">Block</th>
-          <th scope="col">Deadline</th>
-          <th scope="col">Collaborator(s)</th>
-          <th scope="col">Status</th>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Block</th>
+            <th scope="col">Deadline</th>
+            <th scope="col">Collaborator(s)</th>
+            <th scope="col">Status</th>
+          </tr>
         </thead>
         <tbody>
-          <TableRow />
-          <TableRow/>
+          {this.props.blocks.map((block, i) =>
+            <TableRow block={block} index={i} />
+          )}
         </tbody>
       </table>
     );
