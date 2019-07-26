@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Profile from './Profile.js';
 import Signin from './Signin.js';
-import { appConfig } from '../assets/constants'
+import { appConfig } from '../constants'
+import { User, getConfig, configure } from 'radiks';
+
 
 import {
   UserSession,
@@ -34,9 +36,9 @@ export default class App extends Component {
     return (
       <div className="site-wrapper">
         <div className="site-wrapper-inner">
-          { !userSession.isUserSignedIn() ?
-            <Signin userSession={userSession} handleSignIn={ this.handleSignIn } />
-            : <Profile userSession={userSession} handleSignOut={ this.handleSignOut } />
+          { !this.userSession.isUserSignedIn() ?
+            <Signin userSession={this.userSession} handleSignIn={ this.handleSignIn } />
+            : <Profile userSession={this.userSession} handleSignOut={ this.handleSignOut } />
           }
         </div>
       </div>
