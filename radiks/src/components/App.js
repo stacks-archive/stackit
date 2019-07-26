@@ -1,26 +1,31 @@
 import React, { Component } from 'react';
 import Profile from './Profile.js';
 import Signin from './Signin.js';
+import { appConfig } from '../assets/constants'
+
 import {
   UserSession,
   AppConfig
 } from 'blockstack';
 
-const appConfig = new AppConfig()
-const userSession = new UserSession({ appConfig: appConfig })
+
 
 export default class App extends Component {
 
   constructor(props) {
-  	super(props);
+    super(props);
+    this.userSession = new UserSession({ appConfig });
+
   }
 
   handleSignIn(e) {
+    const { userSession } = getConfig();
     e.preventDefault();
     userSession.redirectToSignIn();
   }
 
   handleSignOut(e) {
+    const { userSession } = getConfig();
     e.preventDefault();
     userSession.signUserOut(window.location.origin);
   }
@@ -38,11 +43,16 @@ export default class App extends Component {
     );
   }
 
-  componentWillMount() {
+  async componentWillMount() {
+    configure({
+      apiServer: 'http://localhost:1260',
+      userSession: this.userSession,
+    });
+    const { userSession } = getConfig();
     if (userSession.isSignInPending()) {
-      userSession.handlePendingSignIn().then((userData) => {
-        window.location = window.location.origin;
-      });
+      await userSession.handlePendingSignIn();
+      await User.createWithCurrentUser();
+      window.location = '/';
     }
   }
 }

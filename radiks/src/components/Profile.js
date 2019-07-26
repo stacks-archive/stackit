@@ -8,12 +8,57 @@ import Dashboard from './Dashboard'
 import CreateBlock from './CreateBlock'
 import YourStacks from './YourStacks'
 import '../styles/Profile.css'
+import { Model } from 'radiks';
 import { BLOCKS_FILENAME } from '../constants.js'
 import {jsonCopy} from '../utils.js'
 
 
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
+
+class InvitationTest extends Model {
+  static className = 'InvitationTest';
+
+  static schema = {
+    invitedUser: {
+      type: String,
+      decrypted: true
+    },
+    invitationId: {
+      type: String,
+      decrypted: true
+    }
+  }
+
+
+}
+
+class BlockTest extends Model {
+
+  static className = 'BlockTest';
+
+  static schema = {
+    task: String,
+    description: String,
+    deadline: String,
+    color: {
+      type: String,
+      decrypted: true
+    },
+    completed: {
+      type: Boolean,
+      decrypted: true,
+    },
+    completionMessage: String,
+    advertise: {
+      type: Boolean,
+      decrypted: true,
+    },
+    userGroupId: String,
+    noCollaborators: Number,
+    completeCollaborators: Number,
+  }
+}
 
 export default class Profile extends Component {
   constructor(props) {
