@@ -24,7 +24,8 @@ export default class Dashbaord extends Component {
       }, 
       block: '',
       description: '',
-      deadline: '',   
+      deadline: '',  
+      redirectToHome: false, 
     };
     
     this.addBlock = this.addBlock.bind(this);
@@ -42,20 +43,32 @@ export default class Dashbaord extends Component {
 
   addBlock(e) {
     e.preventDefault();
+    const block = this.state.block;
+    const description = this.state.description;
+    const deadline = this.state.deadline;
 
-    this.props.addBlock([this.state.block,
-                         this.state.description,
-                         this.state.deadline,
-                         false]);
-    this.setState({
-      block: '',
-      description: '',
-      deadline: '',
-    })
-    // redirect to dash
+    if (block != '' && description != '' && deadline != '') {
+
+      this.props.addBlock([block,
+                           description,
+                           deadline,
+                           false]);
+
+      this.setState({
+        block: '',
+        description: '',
+        deadline: '',
+        redirectToHome: true,
+      })
+    }
+  
   }
 
   render() {
+    const redirectToHome = this.state.redirectToHome;
+    if (redirectToHome) {
+      return <Redirect to="/dash" />
+    }
     return (
       <div>
         <h1 className="landing-heading" id="create-heading">Create a block</h1>
