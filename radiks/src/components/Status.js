@@ -45,7 +45,7 @@ export default class Status extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      submitMessage : ''
+      submitMessage : '',
     }
     this.handleChange = this.handleChange.bind(this);
     this.completeBlock = this.completeBlock.bind(this);
@@ -61,13 +61,13 @@ export default class Status extends Component {
     this.setState({submitMessage: ''});
   }
   
+  componentWillMount() {
+    this.setState ({completed: this.props.completed});
+  }
 
   render() {
-    
-
     let status;
-    const completed = this.props.completed;
-    if (completed) {
+    if (this.props.completed) {
       status = <Complete index={this.props.index} completionMessage={this.props.completionMessage} />;
     } else {
       status = <Pending index={this.props.index} 

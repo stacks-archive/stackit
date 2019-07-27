@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../styles/TableRow.css'
 import Status from './Status'
+import { BlockTest } from './Profile'
 
 export default class TableRow extends Component {
   constructor(props) {
@@ -19,12 +20,12 @@ export default class TableRow extends Component {
   }
 
   async loadBlock() {
-    const id = this.props.block._id;
-    const block = await BlockTest.findById(id);
+    const blockModel = this.props.block;
     const { block, description, deadline, 
-            collaborators, completed, completionMesssage } = block.attrs;
+            collaborators, completed, completionMessage } = blockModel.attrs;
     this.setState({ block, description, deadline, collaborators,
                     completed, completionMessage });
+
   } 
 
   componentWillMount() {
@@ -52,7 +53,7 @@ export default class TableRow extends Component {
                    completionMessage={this.state.completionMessage}/>
         </td>
         <td>
-          <a id="blackHref" href="#" onClick={() => this.props.removeBlock(this.props.index)}>X</a>
+          <a id="blackHref" href="#" onClick={() => this.props.removeBlock(this.props.index, this.props.block._id)}>X</a>
         </td>
       </tr>
     );

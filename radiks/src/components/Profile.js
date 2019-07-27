@@ -80,7 +80,6 @@ export default class Profile extends Component {
     this.addBlock = this.addBlock.bind(this);
     this.removeBlock = this.removeBlock.bind(this);
     this.completeBlock = this.completeBlock.bind(this);
-    this.saveBlocks = this.saveBlocks.bind(this);
 
   }
 
@@ -95,8 +94,9 @@ export default class Profile extends Component {
     //  } 
     //})
     var blocks = await BlockTest.fetchOwnList({ });
-
     this.setState({ blocks });
+    console.log("loadTasks() in Profile");
+    this.forceUpdate();
   }
 
 
@@ -111,21 +111,25 @@ export default class Profile extends Component {
     this.loadTasks();
   }
 
-  removeBlock(index) {
+  async removeBlock(index, id) {
     const blocks = jsonCopy(this.state.blocks);
     blocks.splice(index, 1); 
-    this.saveBlocks(blocks);
+    this.setState(blocks);
+    const block = await BlockTest.findById(id);
+    await block.destroy();
   }
 
   async completeBlock(id, message) {
-    const block = await BlockTest.findbyId(id);
+    const block = await BlockTest.findById(id);
     const updatedStatus = {
       completed: true,
       completionMessage: message,
     }
     block.update(updatedStatus);
     await block.save();
+    //console.log(block);
     this.loadTasks();
+
   }
 
  
@@ -185,3 +189,5 @@ export default class Profile extends Component {
     this.loadTasks();
   }
 }
+
+export { BlockTest, InvitationTest };
