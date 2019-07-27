@@ -6,12 +6,31 @@ export default class TableRow extends Component {
   constructor(props) {
     super(props);
 
-   // this.state = {
-    //  submitMessage: ''
-    //}
+    this.state = {
+      block: '',
+      description: '',
+      deadline: '',
+      collaborators: '',
+      completed: false,
+      completionMessage: '',
+    }
 
+    this.loadBlock = this.loadBlock.bind(this);
     //this.handleChange = this.handleChange.bind(this);
     //this.completeBlock = this.completeBlock.bind(this);
+  }
+
+  async loadBlock() {
+    const id = this.props.block._id;
+    const block = await BlockTest.findById(id);
+    const { block, description, deadline, 
+            collaborators, completed, completionMesssage } = block.attrs;
+    this.setState({ block, description, deadline, collaborators,
+                    completed, completionMessage });
+  } 
+
+  componentWillMount() {
+    this.loadBlock();
   }
 
   //handleChange(e) {
@@ -49,4 +68,6 @@ export default class TableRow extends Component {
       </tr>
     );
   }
+
+
 }

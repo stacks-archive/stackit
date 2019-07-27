@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Person, doPublicKeysMatchIssuer,
+  Person
 } from 'blockstack';
 
 
@@ -32,7 +32,7 @@ function Complete(props) {
       <a id="blackHref" data-toggle="collapse" href={"#collapseMessage" + props.index} aria-expanded="false" aria-controls={"#collapseMessage" + props.index}>Completed</a>
       <div class="collapse" id={"collapseMessage" + props.index}>
         <div class="card card-body">
-          {props.block[4]}
+          {props.completionMessage}
         </div>
       </div>
     </div>
@@ -69,7 +69,8 @@ export default class Status extends Component {
       status = <Complete block={this.props.block} index={this.props.index}/>;
     } else {
       status = <Pending block={this.props.block} 
-                        index={this.props.index} 
+                        index={this.props.index}
+                        submitMessage={this.state.submitMessage}
                         completeBlock = {this.completeBlock}
                         handleChange = {this.handleChange} />
     }

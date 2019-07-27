@@ -38,7 +38,7 @@ class BlockTest extends Model {
   static className = 'BlockTest';
 
   static schema = {
-    task: String,
+    block: String,
     description: String,
     deadline: String,
     color: {
@@ -85,22 +85,30 @@ export default class Profile extends Component {
   }
 
 
-  loadTasks() {
-    const options = { decrypt: true };
-    this.props.userSession.getFile(BLOCKS_FILENAME, options)
-    .then((content) => {
-      if(content) {
-        const blocks = JSON.parse(content);
-        this.setState({blocks});
-      } 
-    })
+  async loadTasks() {
+   // const options = { decrypt: true };
+    //this.props.userSession.getFile(BLOCKS_FILENAME, options)
+    //.then((content) => {
+    //  if(content) {
+//const blocks = JSON.parse(content);
+    //    this.setState({blocks});
+    //  } 
+    //})
+    var blocks = await BlockTest.fetchOwnList({ });
+
+    this.setState({ blocks });
   }
 
 
-  addBlock(block) {
-    const blocks = jsonCopy(this.state.blocks);
-    blocks.push(block);
-    this.saveBlocks(blocks);
+  async addBlock(blockArray) {
+    const block = new BlockTest({
+      block: blockArray[0],
+      description: blockArray[1],
+      deadline: blockArray[2],
+      completed: false
+    })
+    await block.save();
+    this.loadTasks();
   }
 
   removeBlock(index) {
@@ -109,18 +117,18 @@ export default class Profile extends Component {
     this.saveBlocks(blocks);
   }
 
-  completeBlock(index, message) {
-    const blocks = jsonCopy(this.state.blocks)
-    blocks[index][3] = !blocks[index][3]
-    blocks[index].push(message)
-    this.saveBlocks(blocks);
+  async completeBlock(id, message) {
+    const block = await BlockTest.findbyId(id);
+    const updatedStatus = {
+      completed: true,
+      completionMessage: message,
+    }
+    block.update(updatedStatus);
+    await block.save();
+    this.loadTasks();
   }
 
-  saveBlocks(blocks) {
-    this.setState({blocks});
-    const options = {encrypt : true};
-    this.props.userSession.putFile(BLOCKS_FILENAME, JSON.stringify(blocks), options);
-  }
+ 
 
   render() {
     const { person } = this.state;

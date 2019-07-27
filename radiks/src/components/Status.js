@@ -57,19 +57,21 @@ export default class Status extends Component {
   }
 
   completeBlock() {
-    this.props.completeBlock(this.props.index, this.state.submitMessage);
+    this.props.completeBlock(this.props.id, this.state.submitMessage);
     this.setState({submitMessage: ''});
   }
   
 
   render() {
+    
+
     let status;
-    const completed = this.props.block[3];
+    const completed = this.props.completed;
     if (completed) {
-      status = <Complete block={this.props.block} index={this.props.index}/>;
+      status = <Complete index={this.props.index} completionMessage={this.props.completionMessage} />;
     } else {
-      status = <Pending block={this.props.block} 
-                        index={this.props.index} 
+      status = <Pending index={this.props.index} 
+                        submitMessage={this.state.submitMessage}
                         completeBlock = {this.completeBlock}
                         handleChange = {this.handleChange} />
     }

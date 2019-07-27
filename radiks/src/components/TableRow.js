@@ -31,17 +31,21 @@ export default class TableRow extends Component {
     return (
       <tr>
         <td>
-        <a id="blackHref" data-toggle="collapse" href={"#description" + this.props.index} aria-expanded="false" aria-controls={"#description" + this.props.index}>{this.props.block[0]}</a>
+        <a id="blackHref" data-toggle="collapse" href={"#description" + this.props.index} aria-expanded="false" aria-controls={"#description" + this.props.index}>{this.state.block}</a>
           <div class="collapse" id={"description" + this.props.index}>
             <div class="card card-body">
-              {this.props.block[1]} 
+              {this.state.description} 
             </div>
           </div>
         </td>
-        <td>{this.props.block[2]}</td>
+        <td>{this.state.deadline}</td>
         <td></td>
         <td>
-           <Status block={this.props.block} index={this.props.index} completeBlock={this.props.completeBlock}/>
+           <Status completed={this.state.completed} 
+                   index={this.props.index} 
+                   id={this.props.block._id}
+                   completeBlock={this.props.completeBlock}
+                   completionMessage={this.state.completionMessage}/>
         </td>
         <td>
           <a id="blackHref" href="#" onClick={() => this.props.removeBlock(this.props.index)}>X</a>
