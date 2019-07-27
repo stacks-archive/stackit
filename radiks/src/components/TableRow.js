@@ -6,26 +6,30 @@ export default class TableRow extends Component {
   constructor(props) {
     super(props);
 
-   // this.state = {
-    //  submitMessage: ''
-    //}
+    this.state = {
+      block: '',
+      description: '',
+      deadline: '',
+      collaborators: '',
+      completed: false,
+      completionMessage: '',
+    }
 
-    //this.handleChange = this.handleChange.bind(this);
-    //this.completeBlock = this.completeBlock.bind(this);
+    this.loadBlock = this.loadBlock.bind(this);
   }
 
-  //handleChange(e) {
-  //  const value = e.target.value;
-//
-  //  this.setState({
-  //    submitMessage: value
-  //  });
-  //};
+  async loadBlock() {
+    const id = this.props.block._id;
+    const block = await BlockTest.findById(id);
+    const { block, description, deadline, 
+            collaborators, completed, completionMesssage } = block.attrs;
+    this.setState({ block, description, deadline, collaborators,
+                    completed, completionMessage });
+  } 
 
-  //completeBlock() {
-  //  this.props.completeBlock(this.props.index, this.state.submitMessage)
-  //  this.setState({submitMessage: ''});
-  //}
+  componentWillMount() {
+    this.loadBlock();
+  }
 
   render() {
     return (

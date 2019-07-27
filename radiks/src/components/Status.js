@@ -32,7 +32,7 @@ function Complete(props) {
       <a id="blackHref" data-toggle="collapse" href={"#collapseMessage" + props.index} aria-expanded="false" aria-controls={"#collapseMessage" + props.index}>Completed</a>
       <div class="collapse" id={"collapseMessage" + props.index}>
         <div class="card card-body">
-          {props.block[4]}
+          {props.completionMessage}
         </div>
       </div>
     </div>
