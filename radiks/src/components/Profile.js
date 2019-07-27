@@ -109,7 +109,7 @@ export default class Profile extends Component {
     this.loadTasks();
   }
 
-  async removeBlock(index, id) {
+  async removeBlock(id) {
     const block = await BlockTest.findById(id);
     await block.destroy();
     this.loadTasks();

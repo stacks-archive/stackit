@@ -28,7 +28,7 @@ export default class TableRow extends Component {
                    block={this.props.block}/>
         </td>
         <td>
-          <a id="blackHref" href="#" onClick={() => this.props.removeBlock(this.props.index, this.props.block._id)}>X</a>
+          <a id="blackHref" href="#" onClick={() => this.props.removeBlock(this.props.block._id)}>X</a>
         </td>
       </tr>
     );
