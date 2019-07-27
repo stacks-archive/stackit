@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../styles/TableRow.css'
 import Status from './Status'
-import { BlockTest } from './Profile'
 
 export default class TableRow extends Component {
 

@@ -9,8 +9,6 @@ import CreateBlock from './CreateBlock'
 import YourStacks from './YourStacks'
 import '../styles/Profile.css'
 import { Model } from 'radiks';
-import { BLOCKS_FILENAME } from '../constants.js'
-import {jsonCopy} from '../utils.js'
 
 
 
@@ -85,14 +83,6 @@ export default class Profile extends Component {
 
 
   async loadTasks() {
-   // const options = { decrypt: true };
-    //this.props.userSession.getFile(BLOCKS_FILENAME, options)
-    //.then((content) => {
-    //  if(content) {
-//const blocks = JSON.parse(content);
-    //    this.setState({blocks});
-    //  } 
-    //})
     var blocks = await BlockTest.fetchOwnList({ });
     this.setState({ blocks });
   }
@@ -123,9 +113,7 @@ export default class Profile extends Component {
     }
     block.update(updatedStatus);
     await block.save();
-    //console.log(block);
     this.loadTasks();
-
   }
 
  
