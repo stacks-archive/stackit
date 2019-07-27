@@ -7,6 +7,7 @@ import NavBar from './NavBar'
 import Dashboard from './Dashboard'
 import CreateBlock from './CreateBlock'
 import YourStacks from './YourStacks'
+import Invitations from './Invitations'
 import '../styles/Profile.css'
 import { Model } from 'radiks';
 
@@ -29,6 +30,53 @@ class InvitationTest extends Model {
   }
 
 
+}
+
+// want to send an invite that auto-accepts
+// then query for Invites that you're now shared on that have a little more info you have to accept
+// we have two layers because we want someone accepting a block invite to know info like
+// the owner, task, and deadline, but we don't want anyone who queries for that user to be able
+// to see it, since the username is non-encrypted for the end-user to be able to access
+// to be able to access the block
+
+// how do you pass the group id used to query for other models associated with that id
+
+class InvitationInvite extends Model {
+  static className = 'InvitationInvite';
+
+  static schema = {
+    invitedUser: {
+      type: String,
+      decrypted: true
+    },
+    invitationId: {
+      type: String,
+      decrypted: true
+    }
+  }
+}
+
+class AdvertiseBlock extends Model {
+  static className = 'AdvertiseBlock'
+  
+  static schema = {
+    block: {
+      type: String,
+      decrypted:true,
+    },
+    description: {
+      type: String,
+      decrypted: true
+    },
+    deadline: {
+      type: String,
+      decrypted: true
+    },
+    owner: {
+      type: String,
+      decrypted: true
+    }
+  }
 }
 
 class BlockTest extends Model {
@@ -93,7 +141,7 @@ export default class Profile extends Component {
       block: blockArray[0],
       description: blockArray[1],
       deadline: blockArray[2],
-      completed: false
+      completed: false,
     })
     await block.save();
     this.loadTasks();
@@ -160,6 +208,14 @@ export default class Profile extends Component {
               {...routeProps} />
             }
           />
+          <Route
+            path='/invitations'
+            render={
+              routeProps => <Invitations
+              userSession={this.props.userSession}
+              {...routeProps} />
+            }
+          /> 
         </Switch>
       </div>
     );
@@ -174,4 +230,4 @@ export default class Profile extends Component {
   }
 }
 
-export { BlockTest, InvitationTest };
+export { BlockTest, InvitationTest, InvitationInvite };
