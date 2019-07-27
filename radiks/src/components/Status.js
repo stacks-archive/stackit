@@ -61,9 +61,6 @@ export default class Status extends Component {
     this.setState({submitMessage: ''});
   }
   
-  componentWillMount() {
-    this.setState ({completed: this.props.completed});
-  }
 
   render() {
     let status;
