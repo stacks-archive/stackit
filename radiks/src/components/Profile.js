@@ -95,8 +95,6 @@ export default class Profile extends Component {
     //})
     var blocks = await BlockTest.fetchOwnList({ });
     this.setState({ blocks });
-    console.log("loadTasks() in Profile");
-    this.forceUpdate();
   }
 
 

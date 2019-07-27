@@ -67,7 +67,8 @@ export default class Status extends Component {
 
   render() {
     let status;
-    if (this.props.completed) {
+    const { completed } = this.props.block.attrs;
+    if (completed) {
       status = <Complete index={this.props.index} completionMessage={this.props.completionMessage} />;
     } else {
       status = <Pending index={this.props.index} 

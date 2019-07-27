@@ -50,7 +50,8 @@ export default class TableRow extends Component {
                    index={this.props.index} 
                    id={this.props.block._id}
                    completeBlock={this.props.completeBlock}
-                   completionMessage={this.state.completionMessage}/>
+                   completionMessage={this.state.completionMessage}
+                   block={this.props.block}/>
         </td>
         <td>
           <a id="blackHref" href="#" onClick={() => this.props.removeBlock(this.props.index, this.props.block._id)}>X</a>
