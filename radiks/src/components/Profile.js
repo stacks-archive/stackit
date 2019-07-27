@@ -110,11 +110,9 @@ export default class Profile extends Component {
   }
 
   async removeBlock(index, id) {
-    const blocks = jsonCopy(this.state.blocks);
-    blocks.splice(index, 1); 
-    this.setState(blocks);
     const block = await BlockTest.findById(id);
     await block.destroy();
+    this.loadTasks();
   }
 
   async completeBlock(id, message) {
