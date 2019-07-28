@@ -15,22 +15,6 @@ import { Model } from 'radiks';
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
-class InvitationTest extends Model {
-  static className = 'InvitationTest';
-
-  static schema = {
-    invitedUser: {
-      type: String,
-      decrypted: true
-    },
-    invitationId: {
-      type: String,
-      decrypted: true
-    }
-  }
-
-
-}
 
 // want to send an invite that auto-accepts
 // then query for Invites that you're now shared on that have a little more info you have to accept
@@ -41,8 +25,8 @@ class InvitationTest extends Model {
 
 // how do you pass the group id used to query for other models associated with that id
 
-class InvitationInvite extends Model {
-  static className = 'InvitationInvite';
+class PreviewInvite extends Model {
+  static className = 'PreviewInvite';
 
   static schema = {
     invitedUser: {
@@ -52,30 +36,25 @@ class InvitationInvite extends Model {
     invitationId: {
       type: String,
       decrypted: true
+    },
+    inviteGroupId: {
+      type: String,
+      decrypted: true
     }
   }
 }
 
-class AdvertiseBlock extends Model {
+class BlockPreview extends Model {
   static className = 'AdvertiseBlock'
   
   static schema = {
-    block: {
-      type: String,
-      decrypted:true,
-    },
-    description: {
-      type: String,
-      decrypted: true
-    },
-    deadline: {
-      type: String,
-      decrypted: true
-    },
-    owner: {
-      type: String,
-      decrypted: true
-    }
+    block: String, // first four used to preview block before invited user accepts
+    description: String,
+    deadline: String,
+    owner: String,
+    userGroupId: String, // used to find this preview based on the previewinvite
+    invitationId: String, // id of the invite for the actual block
+    blockGroupId: String // used to find the userGroup of the block associated with this preview / invitationId
   }
 }
 
@@ -120,9 +99,11 @@ export default class Profile extends Component {
   	  	},
       },
       blocks: [],
+      publicInvites: [], 
+      invites: [],
     };
     
-    this.loadTasks = this.loadTasks.bind(this);
+    this.load= this.load.bind(this);
     this.addBlock = this.addBlock.bind(this);
     this.removeBlock = this.removeBlock.bind(this);
     this.completeBlock = this.completeBlock.bind(this);
@@ -130,9 +111,14 @@ export default class Profile extends Component {
   }
 
 
-  async loadTasks() {
+  async load() {
     var blocks = await BlockTest.fetchOwnList({ });
-    this.setState({ blocks });
+    const publicInvites = await AdvertiseBlock.fetchList({ }); 
+
+    const profile = this.props.userSession.loadUserData();
+    const username = profile.username; 
+    const invites = await InvitationInvite.fetchList({invitedUser: username});
+    this.setState({ blocks, publicInvites, invites});
   }
 
 
@@ -144,13 +130,13 @@ export default class Profile extends Component {
       completed: false,
     })
     await block.save();
-    this.loadTasks();
+    this.load();
   }
 
   async removeBlock(id) {
     const block = await BlockTest.findById(id);
     await block.destroy();
-    this.loadTasks();
+    this.load();
   }
 
   async completeBlock(id, message) {
@@ -161,7 +147,7 @@ export default class Profile extends Component {
     }
     block.update(updatedStatus);
     await block.save();
-    this.loadTasks();
+    this.load();
   }
 
  
@@ -213,6 +199,8 @@ export default class Profile extends Component {
             render={
               routeProps => <Invitations
               userSession={this.props.userSession}
+              publicInvites={this.state.publicInvites}
+              invites={this.state.invites}
               {...routeProps} />
             }
           /> 
@@ -230,4 +218,4 @@ export default class Profile extends Component {
   }
 }
 
-export { BlockTest, InvitationTest, InvitationInvite };
+export { BlockTest, PreivewInvite, BlockPreview };

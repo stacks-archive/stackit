@@ -5,7 +5,7 @@ import {
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import '../styles/CreateBlock.css'
-import { InvitationTest, InvitationInvite } from './Profile'
+import { PreviewInvite, BlockPreview, BlockTest } from './Profile'
 import { GroupInvitation } from 'radiks'
 
 
@@ -25,30 +25,49 @@ export default class Dashboard extends Component {
   	  	},
       }, 
       public: [],
-      invites: [],
+      previews: []
 
     };
-
+    
     this.loadInvites = this.loadInvites.bind(this);
+    this.acceptBlock = this.acceptBlock.bind(this);
     
   }
+// destroy invitationInvites after they've been accepted ? 
 
   componentWillMount() {
     this.loadInvites();
   }
 
   async loadInvites() {
-    const public = await AdvertiseBlock.fetchList({ }); 
-    
+    //const public = await AdvertiseBlock.fetchList({ }); 
+    //this.setState({public});
+
+
     const profile = this.props.userSession.loadUserData();
     const username = profile.username; 
-    const invitationInvite = await InvitationInvite.fetchList({invitedUser: username});
-    const { inviteId } = invitationInvite.attrs;
-    const invitation = await GroupInvitation.findById(inviteId);
+    const previewInvites = await PreviewInvite.fetchList({invitedUser: username});
+
+    const previews = this.state.previews;
+    previewInvites.forEach(function(invite) {
+      const { invitationId, inviteGroupId } = invite.attrs; 
+      const invitation = await GroupInvitation.findById(invitationId);
+      await invitation.activate();
+      await invite.destroy();
+      const blockInvite = await BlockPreview.fetchList({userGroupId: inviteGroupId});
+      previews.push(blockInvite);
+    });
+
+    this.setState({ previews })
+  }
+
+  async acceptBlock(previewId, blockInvitationId, blockGroupId) {
+    const preview = await BlockPreview.findById({previewId});
+
+    const invitation = await GroupInvitation.findById(blockInvitationId);
     await invitation.activate();
 
-
-    this.setState({public, inivtes})
+    const block = await BlockTest.fetchList({userGroupId: blockGroupId});
   }
 
 
@@ -67,11 +86,8 @@ export default class Dashboard extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.blocks.map((block, i) =>
-              <TableRow block={block} 
-                        index={i} 
-                        removeBlock={this.props.removeBlock}
-                        completeBlock={this.props.completeBlock}/>
+            {this.props.invites.map((invite, i) =>
+              <InviteRow invite={invite} />
             )}
           </tbody>
       </table>
