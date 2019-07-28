@@ -70,18 +70,12 @@ class BlockTest extends Model {
       type: String,
       decrypted: true
     },
-    completed: {
-      type: Boolean,
-      decrypted: true,
-    },
+    completed: Number, // 0 for none, 1 for one checked off, 2 for completed
     completionMessage: String,
-    advertise: {
-      type: Boolean,
-      decrypted: true,
-    },
+    accepted: Boolean,
     userGroupId: String,
-    noCollaborators: Number,
-    completeCollaborators: Number,
+    owner: String,
+    collaborator: String,
   }
 }
 
@@ -112,22 +106,29 @@ export default class Profile extends Component {
 
 
   async load() {
-    var blocks = await BlockTest.fetchOwnList({ });
-    const publicInvites = await AdvertiseBlock.fetchList({ }); 
+    const ownBlocks = await BlockTest.fetchOwnList({ accepted: true });
+    const profile = this.props.userSession.loadUserData();
+    const username = profile.username; 
+    const collabBlocks = await BlockTest.fetchList({ collaborator: username })
+    const blocks = ownBlocks.concat(collabBlocks);
 
     const profile = this.props.userSession.loadUserData();
     const username = profile.username; 
-    const invites = await InvitationInvite.fetchList({invitedUser: username});
-    this.setState({ blocks, publicInvites, invites});
+    const invites = await PreviewInvite.fetchList({invitedUser: username});
+    this.setState({ blocks, invites});
   }
 
 
   async addBlock(blockArray) {
+    const profile = this.props.userSession.loadUserData();
+    const username = profile.username; 
     const block = new BlockTest({
       block: blockArray[0],
       description: blockArray[1],
       deadline: blockArray[2],
-      completed: false,
+      completed: 0,
+      accepted: false,
+      owner: username
     })
     await block.save();
     this.load();
@@ -141,8 +142,10 @@ export default class Profile extends Component {
 
   async completeBlock(id, message) {
     const block = await BlockTest.findById(id);
+    const { completed } = block.attrs
+    const newStatus = completed + 1;
     const updatedStatus = {
-      completed: true,
+      completed: newStatus,
       completionMessage: message,
     }
     block.update(updatedStatus);

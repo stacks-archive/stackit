@@ -63,11 +63,23 @@ export default class Dashboard extends Component {
 
   async acceptBlock(previewId, blockInvitationId, blockGroupId) {
     const preview = await BlockPreview.findById({previewId});
+    preview.destroy();
 
     const invitation = await GroupInvitation.findById(blockInvitationId);
     await invitation.activate();
 
     const block = await BlockTest.fetchList({userGroupId: blockGroupId});
+
+    const profile = this.props.userSession.loadUserData();
+    const username = profile.username; 
+
+    const updatedStatus = {
+      accepted: true,
+      collaborator: username
+    }
+    block.update(updatedStatus);
+    await block.save();
+    this.loadInvites();
   }
 
 
