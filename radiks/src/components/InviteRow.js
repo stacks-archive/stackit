@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../styles/TableRow.css'
 
-export default class TableRow extends Component {
+export default class InviteRow extends Component {
 
   render() {
     const blockPreviewModel = this.props.preview;

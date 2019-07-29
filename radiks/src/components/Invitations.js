@@ -7,11 +7,12 @@ import { Link } from 'react-router-dom'
 import '../styles/CreateBlock.css'
 import { PreviewInvite, BlockPreview, BlockTest } from './Profile'
 import { GroupInvitation } from 'radiks'
+import InviteRow from './InviteRow'
 
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
-export default class Dashboard extends Component {
+export default class Invitations extends Component {
   constructor(props) {
   	super(props);
 
@@ -49,7 +50,7 @@ export default class Dashboard extends Component {
     const previewInvites = await PreviewInvite.fetchList({invitedUser: username});
 
     const previews = this.state.previews;
-    previewInvites.forEach(function(invite) {
+    previewInvites.forEach(async function(invite) {
       const { invitationId, inviteGroupId } = invite.attrs; 
       const invitation = await GroupInvitation.findById(invitationId);
       await invitation.activate();
@@ -86,7 +87,6 @@ export default class Dashboard extends Component {
   render() {
     return (
       <div>
-        <p>Publicly advertised blocks looking for a collaborator</p>
         <table className="table table-hover">
           <thead className="thead">
             <tr>

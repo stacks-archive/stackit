@@ -109,11 +109,9 @@ export default class Profile extends Component {
     const ownBlocks = await BlockTest.fetchOwnList({ accepted: true });
     const profile = this.props.userSession.loadUserData();
     const username = profile.username; 
+
     const collabBlocks = await BlockTest.fetchList({ collaborator: username })
     const blocks = ownBlocks.concat(collabBlocks);
-
-    const profile = this.props.userSession.loadUserData();
-    const username = profile.username; 
     const invites = await PreviewInvite.fetchList({invitedUser: username});
     this.setState({ blocks, invites});
   }
@@ -251,8 +249,8 @@ export default class Profile extends Component {
     this.setState({
       person: new Person(userSession.loadUserData().profile),
     });
-    this.loadTasks();
+    this.load();
   }
 }
 
-export { BlockTest, PreivewInvite, BlockPreview };
+export { BlockTest, PreviewInvite, BlockPreview };
