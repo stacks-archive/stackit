@@ -127,13 +127,16 @@ export default class Profile extends Component {
 
     const blockGroup = new UserGroup({ name: blockArray[0] + username });
     await blockGroup.create();
+    console.log("created blockGroup")
 
-    const previewGroup = new UserGroup({ name: blockArray[0] + username + 'preview'});
+    const previewGroup = new UserGroup({ name: username});
     await previewGroup.create();
+    console.log("created previewGroup")
 
     const collaborator = blockArray[3];
     const blockInvitation = await blockGroup.makeGroupMembership(collaborator);
     const previewInvitation = await previewGroup.makeGroupMembership(collaborator);
+    console.log("made both group memberships")
     
     const block = new BlockTest({
       block: blockArray[0],
@@ -145,6 +148,7 @@ export default class Profile extends Component {
       userGroupId: blockGroup._id
     })
     await block.save();
+    console.log("saved block")
  
 
     const previewInvite = new PreviewInvite({
@@ -153,6 +157,7 @@ export default class Profile extends Component {
       inviteGroupId: previewGroup._id
     })
     await previewInvite.save();
+    console.log("saved previewInvite")
 
     const blockPreview = new BlockPreview({
       block: blockArray[0],
@@ -167,6 +172,7 @@ export default class Profile extends Component {
 
     })
     await blockPreview.save();
+    console.log("saved blockPreview")
 
     this.load();
   }
