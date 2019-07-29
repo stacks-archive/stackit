@@ -141,14 +141,14 @@ export default class Profile extends Component {
       completed: 0,
       accepted: false,
       owner: username,
-      userGroupId: group._id
+      userGroupId: blockGroup._id
     })
     await block.save();
  
 
     const previewInvite = new PreviewInvite({
       invitedUser: collaborator,
-      invitationId: previewInvitation,
+      invitationId: previewInvitation._id,
       inviteGroupId: previewGroup._id
     })
     await previewInvite.save();
