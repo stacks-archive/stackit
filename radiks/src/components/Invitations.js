@@ -25,53 +25,53 @@ export default class Invitations extends Component {
   	  	  return avatarFallbackImage;
   	  	},
       }, 
-      public: [],
-      previews: []
+      //public: [],
+      //previews: []
 
     };
     
-    this.loadInvites = this.loadInvites.bind(this);
-    this.acceptBlock = this.acceptBlock.bind(this);
+    //this.loadInvites = this.loadInvites.bind(this);
+    //this.acceptBlock = this.acceptBlock.bind(this);
     
   }
 
  
 
-  async loadInvites() {
+  //async loadInvites() {
     //const public = await AdvertiseBlock.fetchList({ }); 
     //this.setState({public});
 
 
-    const profile = this.props.userSession.loadUserData();
-    const username = profile.username; 
-    const previewInvites = await PreviewInvite.fetchList({invitedUser: username});
+    //const profile = this.props.userSession.loadUserData();
+    //const username = profile.username; 
+    //const previewInvites = await PreviewInvite.fetchList({invitedUser: username});
 
-    previewInvites.forEach(async function(invite) {
-      const { invitationId, inviteGroupId } = invite.attrs; 
-      const invitation = await GroupInvitation.findById(invitationId);
-      await invitation.activate();
-      await invite.destroy();
-      const blockInvite = await BlockPreview.fetchList({userGroupId: inviteGroupId});
-      const updatedStatus = {
-        activated: true
-      }
-      blockInvite.updated(updatedStatus);
-      await blockInvite.save();
-    });
+    //previewInvites.forEach(async function(invite) {
+    //  const { invitationId, inviteGroupId } = invite.attrs; 
+    //  const invitation = await GroupInvitation.findById(invitationId);
+    //  await invitation.activate();
+    //  await invite.destroy();
+    //  const blockInvite = await BlockPreview.fetchList({userGroupId: inviteGroupId});
+    //  const updatedStatus = {
+    //    activated: true
+    //  }
+    //  blockInvite.updated(updatedStatus);
+    //  await blockInvite.save();
+    //});
 
-    const previews = await BlockPreview.fetchList({ invitedUser: username, activated: true})
-    this.setState({ previews })
-  }
+    //const previews = await BlockPreview.fetchList({ invitedUser: username, activated: true})
+    //this.setState({ previews })
+  //}
   //async acceptBlock(previewId, blockInvitationId, blockGroupId) {
-  async acceptBlock(previewId) {
-    const profile = this.props.userSession.loadUserData();
-    const username = profile.username; 
+  //async acceptBlock(previewId) {
+    //const profile = this.props.userSession.loadUserData();
+    //const username = profile.username; 
 
-    const preview = await BlockPreview.findById({previewId});
-    const { block, description, deadline, owner } = preview.attrs
-    const blockGroup = new UserGroup({ name: block + owner });
-    await blockGroup.create();
-    const blockInvitation = await previewGroup.makeGroupMembership(owner);
+    //const preview = await BlockPreview.findById({previewId});
+    //const { block, description, deadline, owner } = preview.attrs
+    //const blockGroup = new UserGroup({ name: block + owner });
+    //await blockGroup.create();
+    //const blockInvitation = await previewGroup.makeGroupMembership(owner);
 
     //preview.destroy();
 
@@ -87,17 +87,17 @@ export default class Invitations extends Component {
     //}
     //block.update(updatedStatus);
 
-    const newBlock = new BlockTest({
-      block: 
-    })
+    //const newBlock = new BlockTest({
+    //  block: 
+    //})
 
-    await block.save();
-    this.loadInvites();
-  }
+    //await block.save();
+    //this.loadInvites();
+  //}
 
   render() {
     console.log("Invitations.js")
-    console.log(this.props.invites);
+    //console.log(this.props.invites);
     return (
       <div>
         <table className="table table-hover">
@@ -111,8 +111,9 @@ export default class Invitations extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.previews.map((preview, i) =>
-              <InviteRow preview={preview} />
+            {this.props.previews.map((preview, i) =>
+              <InviteRow preview={preview}
+                         acceptBlock={this.props.acceptBlock} />
             )}
           </tbody>
       </table>
@@ -125,6 +126,6 @@ export default class Invitations extends Component {
     this.setState({
       person: new Person(userSession.loadUserData().profile),
     });
-    this.loadInvites();
+    //this.loadInvites();
   }
 }
