@@ -125,30 +125,30 @@ export default class Profile extends Component {
     const profile = this.props.userSession.loadUserData();
     const username = profile.username; 
 
-    const blockGroup = new UserGroup({ name: blockArray[0] + username });
-    await blockGroup.create();
-    console.log("created blockGroup")
+    //const blockGroup = new UserGroup({ name: blockArray[0] + username });
+    //await blockGroup.create();
+    //console.log("created blockGroup")
 
     const previewGroup = new UserGroup({ name: username});
     await previewGroup.create();
     console.log("created previewGroup")
 
     const collaborator = blockArray[3];
-    const blockInvitation = await blockGroup.makeGroupMembership(collaborator);
+    //const blockInvitation = await blockGroup.makeGroupMembership(collaborator);
     const previewInvitation = await previewGroup.makeGroupMembership(collaborator);
     console.log("made both group memberships")
     
-    const block = new BlockTest({
-      block: blockArray[0],
-      description: blockArray[1],
-      deadline: blockArray[2],
-      completed: 0,
-      accepted: false,
-      owner: username,
-      userGroupId: blockGroup._id
-    })
-    await block.save();
-    console.log("saved block")
+    //const block = new BlockTest({
+    //  block: blockArray[0],
+    //  description: blockArray[1],
+    //  deadline: blockArray[2],
+    //  completed: 0,
+    //  accepted: false,
+    //  owner: username,
+    //  userGroupId: blockGroup._id
+    //})
+    //await block.save();
+    //console.log("saved block")
  
 
     const previewInvite = new PreviewInvite({
@@ -167,8 +167,8 @@ export default class Profile extends Component {
       invitedUser: collaborator,
       activated: true,
       userGroupId: previewGroup._id,
-      invitationId: blockInvitation._id,
-      blockGroupId: blockGroup._id
+      //invitationId: blockInvitation._id
+      //blockGroupId: blockGroup._id
 
     })
     await blockPreview.save();

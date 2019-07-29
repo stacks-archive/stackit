@@ -6,7 +6,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import '../styles/CreateBlock.css'
 import { PreviewInvite, BlockPreview, BlockTest } from './Profile'
-import { GroupInvitation } from 'radiks'
+import { GroupInvitation, UserGroup } from 'radiks'
 import InviteRow from './InviteRow'
 
 
@@ -62,24 +62,35 @@ export default class Invitations extends Component {
     const previews = await BlockPreview.fetchList({ invitedUser: username, activated: true})
     this.setState({ previews })
   }
-
-  async acceptBlock(previewId, blockInvitationId, blockGroupId) {
-    const preview = await BlockPreview.findById({previewId});
-    preview.destroy();
-
-    const invitation = await GroupInvitation.findById(blockInvitationId);
-    await invitation.activate();
-
-    const block = await BlockTest.fetchList({userGroupId: blockGroupId});
-
+  //async acceptBlock(previewId, blockInvitationId, blockGroupId) {
+  async acceptBlock(previewId) {
     const profile = this.props.userSession.loadUserData();
     const username = profile.username; 
 
-    const updatedStatus = {
-      accepted: true,
-      collaborator: username
-    }
-    block.update(updatedStatus);
+    const preview = await BlockPreview.findById({previewId});
+    const { block, description, deadline, owner } = preview.attrs
+    const blockGroup = new UserGroup({ name: block + owner });
+    await blockGroup.create();
+    const blockInvitation = await previewGroup.makeGroupMembership(owner);
+
+    //preview.destroy();
+
+    //const invitation = await GroupInvitation.findById(blockInvitationId);
+    //await invitation.activate();
+
+    //const block = await BlockTest.fetchList({userGroupId: blockGroupId});
+
+
+    //const updatedStatus = {
+    //  accepted: true,
+    //  collaborator: username
+    //}
+    //block.update(updatedStatus);
+
+    const newBlock = new BlockTest({
+      block: 
+    })
+
     await block.save();
     this.loadInvites();
   }
