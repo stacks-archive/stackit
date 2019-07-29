@@ -52,6 +52,8 @@ class BlockPreview extends Model {
     description: String,
     deadline: String,
     owner: String,
+    invitedUser: String, // used to query for all BlockPreviews for this user that have been activated
+    activated: Boolean,
     userGroupId: String, // used to find this preview based on the previewinvite
     invitationId: String, // id of the invite for the actual block
     blockGroupId: String // used to find the userGroup of the block associated with this preview / invitationId
@@ -113,25 +115,26 @@ export default class Profile extends Component {
     const collabBlocks = await BlockTest.fetchList({ collaborator: username })
     const blocks = ownBlocks.concat(collabBlocks);
     const invites = await PreviewInvite.fetchList({invitedUser: username});
+    console.log("Profile");
+    console.log(invites);
     this.setState({ blocks, invites});
   }
 
 
   async addBlock(blockArray) {
-    
+    const profile = this.props.userSession.loadUserData();
+    const username = profile.username; 
 
-    const blockGroup = new UserGroup({ name: block._id});
+    const blockGroup = new UserGroup({ name: blockArray[0] + username });
     await blockGroup.create();
 
-    const previewGroup = new UserGroup({ name: block._id + 'preview'});
+    const previewGroup = new UserGroup({ name: blockArray[0] + username + 'preview'});
     await previewGroup.create();
 
     const collaborator = blockArray[3];
     const blockInvitation = await blockGroup.makeGroupMembership(collaborator);
     const previewInvitation = await previewGroup.makeGroupMembership(collaborator);
     
-    const profile = this.props.userSession.loadUserData();
-    const username = profile.username; 
     const block = new BlockTest({
       block: blockArray[0],
       description: blockArray[1],
@@ -156,6 +159,8 @@ export default class Profile extends Component {
       description: blockArray[1],
       deadline: blockArray[2],
       owner: username,
+      invitedUser: collaborator,
+      activated: true,
       userGroupId: previewGroup._id,
       invitationId: blockInvitation._id,
       blockGroupId: blockGroup._id

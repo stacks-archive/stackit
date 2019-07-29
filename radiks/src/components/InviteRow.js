@@ -5,6 +5,8 @@ export default class InviteRow extends Component {
 
   render() {
     const blockPreviewModel = this.props.preview;
+    console.log("made it to InviteRow");
+    console.log(blockPreviewModel);
     const { block, description, deadline, owner, invitationId, blockGroupId } = blockPreviewModel.attrs;
     return (
       <tr>

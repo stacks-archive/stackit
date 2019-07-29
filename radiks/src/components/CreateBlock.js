@@ -54,7 +54,6 @@ export default class Dashbaord extends Component {
       this.props.addBlock([block,
                            description,
                            deadline,
-                           false,
                            collaborator]);
 
       this.setState({
@@ -93,7 +92,7 @@ export default class Dashbaord extends Component {
                       placeholder="Description"></textarea>
             <input type="text" 
                    className="form-control" 
-                   name="block" 
+                   name="collaborator" 
                    value={this.state.collaborator}
                    onChange={this.handleChange}
                    placeholder="Collaborator's Blockstack ID">

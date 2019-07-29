@@ -34,11 +34,8 @@ export default class Invitations extends Component {
     this.acceptBlock = this.acceptBlock.bind(this);
     
   }
-// destroy invitationInvites after they've been accepted ? 
 
-  componentWillMount() {
-    this.loadInvites();
-  }
+ 
 
   async loadInvites() {
     //const public = await AdvertiseBlock.fetchList({ }); 
@@ -49,16 +46,20 @@ export default class Invitations extends Component {
     const username = profile.username; 
     const previewInvites = await PreviewInvite.fetchList({invitedUser: username});
 
-    const previews = this.state.previews;
     previewInvites.forEach(async function(invite) {
       const { invitationId, inviteGroupId } = invite.attrs; 
       const invitation = await GroupInvitation.findById(invitationId);
       await invitation.activate();
       await invite.destroy();
       const blockInvite = await BlockPreview.fetchList({userGroupId: inviteGroupId});
-      previews.push(blockInvite);
+      const updatedStatus = {
+        activated: true
+      }
+      blockInvite.updated(updatedStatus);
+      await blockInvite.save();
     });
 
+    const previews = await BlockPreview.fetchList({ invitedUser: username, activated: true})
     this.setState({ previews })
   }
 
@@ -83,8 +84,9 @@ export default class Invitations extends Component {
     this.loadInvites();
   }
 
-
   render() {
+    console.log("Invitations.js")
+    console.log(this.props.invites);
     return (
       <div>
         <table className="table table-hover">
@@ -98,8 +100,8 @@ export default class Invitations extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.invites.map((invite, i) =>
-              <InviteRow invite={invite} />
+            {this.state.previews.map((preview, i) =>
+              <InviteRow preview={preview} />
             )}
           </tbody>
       </table>
@@ -112,5 +114,6 @@ export default class Invitations extends Component {
     this.setState({
       person: new Person(userSession.loadUserData().profile),
     });
+    this.loadInvites();
   }
 }
