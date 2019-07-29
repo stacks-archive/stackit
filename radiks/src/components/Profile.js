@@ -101,30 +101,38 @@ export default class Profile extends Component {
     const profile = this.props.userSession.loadUserData();
     const username = profile.username; 
     const ownBlocks = await Block.fetchList({owner: username, accepted: true});
+    
     const collabBlocks = await Block.fetchList({collaborator: username, accepted: true});
     const blocks = ownBlocks.concat(collabBlocks);
 
-    const previews = await Block.fetchList({collaborator: username, activated: true, accepted: false});
-    this.setState({ blocks, previews });
+    const b = await Block.fetchList({});
+    console.log(b);
+    //const previews = await Block.fetchList({collaborator: username, accepted: false});
+    //this.setState({ blocks, previews });
   }
 
   async load() {
-    const profile = this.props.userSession.loadUserData();
-    const username = profile.username; 
+    //const profile = this.props.userSession.loadUserData();
+    //const username = profile.username; 
 
-    const invites = await Invitation.fetchList({ invitedUser: username });
-    invites.forEach(async function(invite) {
-      const { invitationId, blockUserGroupId } = invite.attrs;
-      await invite.destroy();
-      const invitation = await GroupInvitation.findById(invitationId);
-      await invitation.activate();
+    //const invites = await Invitation.fetchList({ invitedUser: username });
+    //console.log("invites");
+    //console.log(invites);
+    //invites.forEach(async function(invite) {
+    //  const { invitationId, blockUserGroupId } = invite.attrs;
+    //  //await invite.destroy();
+     // const invitation = await GroupInvitation.findById(invitationId);
+     // await invitation.activate();
+     // console.log("hi!")
 
-      const block = await Block.fetchList({ userGroupId: blockUserGroupId });
-      block.update({
-        activated: true
-      });
-      await block.save();
-    });
+      //const block = await Block.fetchList({ userGroupId: blockUserGroupId });
+      //console.log("Hi");
+      //console.log(block);
+      //block.update({
+      //  activated: true
+      //});
+      //await block.save();
+    //});
 
     this.loadUpdates();
   }
