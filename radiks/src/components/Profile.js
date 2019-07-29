@@ -9,7 +9,7 @@ import CreateBlock from './CreateBlock'
 import YourStacks from './YourStacks'
 import Invitations from './Invitations'
 import '../styles/Profile.css'
-import { Model } from 'radiks';
+import { Model, UserGroup } from 'radiks';
 
 
 
@@ -120,6 +120,18 @@ export default class Profile extends Component {
 
 
   async addBlock(blockArray) {
+    
+
+    const blockGroup = new UserGroup({ name: block._id});
+    await blockGroup.create();
+
+    const previewGroup = new UserGroup({ name: block._id + 'preview'});
+    await previewGroup.create();
+
+    const collaborator = blockArray[3];
+    const blockInvitation = await blockGroup.makeGroupMembership(collaborator);
+    const previewInvitation = await previewGroup.makeGroupMembership(collaborator);
+    
     const profile = this.props.userSession.loadUserData();
     const username = profile.username; 
     const block = new BlockTest({
@@ -128,9 +140,31 @@ export default class Profile extends Component {
       deadline: blockArray[2],
       completed: 0,
       accepted: false,
-      owner: username
+      owner: username,
+      userGroupId: group._id
     })
     await block.save();
+ 
+
+    const previewInvite = new PreviewInvite({
+      invitedUser: collaborator,
+      invitationId: previewInvitation,
+      inviteGroupId: previewGroup._id
+    })
+    await previewInvite.save();
+
+    const blockPreview = new BlockPreview({
+      block: blockArray[0],
+      description: blockArray[1],
+      deadline: blockArray[2],
+      owner: username,
+      userGroupId: previewGroup._id,
+      invitationId: blockInvitation._id,
+      blockGroupId: blockGroup._id
+
+    })
+    await blockPreview.save();
+
     this.load();
   }
 
