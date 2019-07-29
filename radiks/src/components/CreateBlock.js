@@ -25,6 +25,7 @@ export default class Dashbaord extends Component {
       block: '',
       description: '',
       deadline: '',  
+      collaborator: '',
       redirectToHome: false, 
     };
     
@@ -46,18 +47,21 @@ export default class Dashbaord extends Component {
     const block = this.state.block;
     const description = this.state.description;
     const deadline = this.state.deadline;
+    const collaborator = this.state.collaborator;
 
-    if (block != '' && description != '' && deadline != '') {
+    if (block != '' && description != '' && deadline != '' && collaborator != '') {
 
       this.props.addBlock([block,
                            description,
                            deadline,
-                           false]);
+                           false,
+                           collaborator]);
 
       this.setState({
         block: '',
         description: '',
         deadline: '',
+        collaborator: '',
         redirectToHome: true,
       })
     }
@@ -87,6 +91,13 @@ export default class Dashbaord extends Component {
                       value={this.state.description}
                       onChange={this.handleChange}
                       placeholder="Description"></textarea>
+            <input type="text" 
+                   className="form-control" 
+                   name="block" 
+                   value={this.state.collaborator}
+                   onChange={this.handleChange}
+                   placeholder="Collaborator's Blockstack ID">
+            </input>
             <label for="date">Deadline</label>
             <input type="date" 
                    className="form-control" 
