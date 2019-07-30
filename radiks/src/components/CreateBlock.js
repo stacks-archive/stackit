@@ -9,7 +9,7 @@ import '../styles/CreateBlock.css'
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
-export default class Dashbaord extends Component {
+export default class CreateBlock extends Component {
   constructor(props) {
   	super(props);
 

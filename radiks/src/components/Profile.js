@@ -15,18 +15,8 @@ import { Model, UserGroup, GroupInvitation } from 'radiks';
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
-
-// want to send an invite that auto-accepts
-// then query for Invites that you're now shared on that have a little more info you have to accept
-// we have two layers because we want someone accepting a block invite to know info like
-// the owner, task, and deadline, but we don't want anyone who queries for that user to be able
-// to see it, since the username is non-encrypted for the end-user to be able to access
-// to be able to access the block
-
-// how do you pass the group id used to query for other models associated with that id
-
-class Invitation extends Model {
-  static className = 'Invitation';
+class InvitationTesting extends Model {
+  static className = 'InvitationTesting';
 
   static schema = {
     invitedUser: {
@@ -40,18 +30,25 @@ class Invitation extends Model {
     blockUserGroupId: {
       type: String,
       decrypted: true
+    },
+    activated: {
+      type: Boolean,
+      decrypted: true
     }
   }
 }
 
-class Block extends Model {
-  static className = 'block';
+class TestBlock extends Model {
+  static className = 'TestBlock';
 
   static schema = {
     block: String,
     description: String,
     deadline: String,
-    owner: String,
+    owner: {
+      type: String,
+      decrypted: true
+    },
     collaborator: String,
     activated: Boolean,
     color: {
@@ -63,7 +60,7 @@ class Block extends Model {
     yCoord: Number,
     accepted: Boolean,
     completionLevel: Number,
-    userGroupId: String,
+    //userGroupId: String,
   }
 }
 
@@ -100,39 +97,54 @@ export default class Profile extends Component {
   async loadUpdates() {
     const profile = this.props.userSession.loadUserData();
     const username = profile.username; 
-    const ownBlocks = await Block.fetchList({owner: username, accepted: true});
+
+    // Supposed to fetch blocks this user has created (nothing shows up)
+    const ownBlocks = await TestBlock.fetchOwnList({});
+
+    console.log("fetched ownBlocks");
+    console.log(ownBlocks);
     
-    const collabBlocks = await Block.fetchList({collaborator: username, accepted: true});
+    // intended to fetch blocks this user has been shared on 
+    const collabBlocks = await TestBlock.fetchList({collaborator: username, accepted: true});
+    console.log("fetched collabBlocks");
+    console.log(collabBlocks);
     const blocks = ownBlocks.concat(collabBlocks);
 
-    const b = await Block.fetchList({});
-    console.log(b);
-    //const previews = await Block.fetchList({collaborator: username, accepted: false});
-    //this.setState({ blocks, previews });
+    // fetching blocks the user has been shared on but has not yet accepted
+    const previews = await TestBlock.fetchList({collaborator: username, accepted: false});
+    this.setState({ blocks, previews });
   }
 
   async load() {
-    //const profile = this.props.userSession.loadUserData();
-    //const username = profile.username; 
+    const profile = this.props.userSession.loadUserData();
+    const username = profile.username; 
 
-    //const invites = await Invitation.fetchList({ invitedUser: username });
-    //console.log("invites");
-    //console.log(invites);
-    //invites.forEach(async function(invite) {
-    //  const { invitationId, blockUserGroupId } = invite.attrs;
-    //  //await invite.destroy();
-     // const invitation = await GroupInvitation.findById(invitationId);
-     // await invitation.activate();
-     // console.log("hi!")
+    // fetch all the invites that this user has pending
+    const invites = await InvitationTesting.fetchList({ invitedUser: username, activated: false });
+    console.log("fetched invites");
+    console.log(invites);
+    if (Array.isArray(invites) && invites.length) {
+      invites.forEach(async function(invite) {
+        const { invitationId, blockUserGroupId } = invite.attrs;      
 
-      //const block = await Block.fetchList({ userGroupId: blockUserGroupId });
-      //console.log("Hi");
-      //console.log(block);
-      //block.update({
-      //  activated: true
-      //});
-      //await block.save();
-    //});
+        // activate invitation
+        const invitation = await GroupInvitation.findById(invitationId);
+        await invitation.activate();
+        invite.update({
+          activated: true
+        });
+        await invite.save();
+        console.log("activated and updated invitation as active");
+
+        // find the block that is associated with the user group that was just actiated
+        const block = await TestBlock.fetchList({ userGroupId: blockUserGroupId });
+        block.update({
+          activated: true
+        });
+        console.log("marked block as activated");
+        await block.save();
+      });
+    }
 
     this.loadUpdates();
   }
@@ -142,22 +154,31 @@ export default class Profile extends Component {
     const profile = this.props.userSession.loadUserData();
     const username = profile.username; 
 
-    const blockGroup = new UserGroup({ name: 'My Group Name' });
+    // create UserGroup
+    const blockGroup = new UserGroup({ name: 'dummy name' });
     await blockGroup.create();
-    //const blockGroupId = blockGroup._id;
+    
+    console.log("created blockGroup");
 
     const collaborator = blockArray[3];
-    //const group = await UserGroup.findById(blockGroupId);
-    const blockInvitation = await blockGroup.makeGroupMembership(collaborator);
 
-    const invite = new Invitation({
+
+    // create invitation
+    const blockInvitation = await blockGroup.makeGroupMembership(collaborator);
+    console.log("sent invitation");
+
+    // create invitation model instance (unencrypted)
+    const invite = new InvitationTesting({
       invitedUser: collaborator,
       invitationId: blockInvitation._id,
-      blockUserGroupId: blockGroup._id
+      blockUserGroupId: blockGroup._id,
+      activated: false
     })
     await invite.save();
 
-    const newBlock = new Block({
+    console.log("created invite");
+
+    const attrs = {
       block: blockArray[0],
       description: blockArray[1],
       deadline: blockArray[2],
@@ -170,21 +191,26 @@ export default class Profile extends Component {
       yCoord: 0,
       accepted: false,
       completionLevel: 0,
-      userGroupId: blockGroup._id
-    })
+    }
+
+    attrs.userGroupId = blockGroup._id;
+
+    // create and save a new block
+    const newBlock = new TestBlock(attrs);
     await newBlock.save();
+    console.log("created block");
     
     this.load();
   }
 
   async removeBlock(id) {
-    const block = await Block.findById(id);
+    const block = await TestBlock.findById(id);
     await block.destroy();
     this.loadUpdates();
   }
 
   async completeBlock(id, message) {
-    const block = await Block.findById(id);
+    const block = await TestBlock.findById(id);
     const { completionLevel } = block.attrs
     const newStatus = completionLevel + 1;
     const updatedStatus = {
@@ -197,7 +223,7 @@ export default class Profile extends Component {
   }
 
   async acceptBlock(id) {
-    const block = await Block.findById(id);
+    const block = await TestBlock.findById(id);
     block.update({
       accepted: true
     })
@@ -271,4 +297,4 @@ export default class Profile extends Component {
   }
 }
 
-export { Invitation, Block };
+export { InvitationTesting, TestBlock };
