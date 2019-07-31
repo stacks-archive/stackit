@@ -23,7 +23,8 @@ export default class BlockTable extends Component {
             <TableRow block={block} 
                       index={i} 
                       removeBlock={this.props.removeBlock}
-                      completeBlock={this.props.completeBlock}/>
+                      completeBlock={this.props.completeBlock}
+                      username={this.props.username}/>
           )}
         </tbody>
       </table>

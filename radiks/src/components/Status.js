@@ -6,8 +6,8 @@ function Pending(props) {
     <div>
       <p>Pending</p>
       <a id="blackHref" data-toggle="collapse" href={"#collapseSubmit" + props.index} aria-expanded="false" aria-controls={"#collapseSubmit" + props.index}>&#10004;</a>
-      <div class="collapse" id={"collapseSubmit" + props.index}>
-        <div class="card card-body">
+      <div className="collapse" id={"collapseSubmit" + props.index}>
+        <div className="card card-body">
           <textarea type="text" 
                   className="form-control" 
                   name="description" 

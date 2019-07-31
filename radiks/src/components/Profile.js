@@ -224,6 +224,8 @@ export default class Profile extends Component {
       accepted: true
     })
     await block.save();
+    console.log("accepted block!");
+    console.log(block);
     this.loadUpdates();
   }
 
@@ -275,7 +277,7 @@ export default class Profile extends Component {
               routeProps => <Invitations
               userSession={this.props.userSession}
               previews={this.state.previews}
-              acceptBlock={this.accetpBlock}
+              acceptBlock={this.acceptBlock}
               {...routeProps} />
             }
           /> 

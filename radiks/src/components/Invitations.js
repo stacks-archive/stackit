@@ -26,9 +26,11 @@ export default class Invitations extends Component {
 
 
   render() {
+    const profile = this.props.userSession.loadUserData();
+    const username = profile.username; 
     console.log("Invitations.js")
     return (
-      <div>
+      <div className="col-sm-11">
         <table className="table table-hover">
           <thead className="thead">
             <tr>
@@ -36,13 +38,14 @@ export default class Invitations extends Component {
               <th scope="col">Description</th>
               <th scope="col">Deadline</th>
               <th scope="col">Owner</th>
-              <th scope="col">Accept</th>
+              <th scope="col">Status</th>
             </tr>
           </thead>
           <tbody>
             {this.props.previews.map((preview, i) =>
               <InviteRow preview={preview}
-                         acceptBlock={this.props.acceptBlock} />
+                         acceptBlock={this.props.acceptBlock}
+                         username={username} />
             )}
           </tbody>
       </table>

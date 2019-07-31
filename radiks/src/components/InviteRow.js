@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../styles/TableRow.css'
+import InviteStatus from './InviteStatus'
 
 export default class InviteRow extends Component {
 
@@ -17,7 +18,11 @@ export default class InviteRow extends Component {
         <td>{owner}
         </td>
         <td>
-          <a id="blackHref" href="/" onClick={() => this.props.acceptBlock(this.props.preview._id)}>Accept</a>
+          <InviteStatus
+             id={blockModel._id}
+             acceptBlock={this.props.acceptBlock}
+             username={this.props.username}
+             owner={owner} />
         </td>
       </tr>
     );

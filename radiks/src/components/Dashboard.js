@@ -28,6 +28,8 @@ export default class Dashbaord extends Component {
   
 
   render() {
+    const profile = this.props.userSession.loadUserData();
+    const username = profile.username; 
     return (
       <div className="row">
         <div className="col-sm-3">
@@ -36,7 +38,8 @@ export default class Dashbaord extends Component {
         <div className="col-sm-8">
           <BlockTable blocks={this.props.blocks} 
                       removeBlock={this.props.removeBlock} 
-                      completeBlock={this.props.completeBlock} /> 
+                      completeBlock={this.props.completeBlock}
+                      username={username} /> 
         </div>
       </div>
     );

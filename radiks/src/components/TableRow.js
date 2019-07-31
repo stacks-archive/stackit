@@ -6,19 +6,27 @@ export default class TableRow extends Component {
 
   render() {
     const blockModel = this.props.block;
-    const { block, description, deadline, completionMessage } = blockModel.attrs;
+    const { block, description, deadline, completionMessage, collaborator, owner } = blockModel.attrs;
+    var collab;
+    if (collaborator === this.props.username) {
+      collab = owner;
+    }
+    else {
+      collab = collaborator;
+    }
+
     return (
       <tr>
         <td>
         <a id="blackHref" data-toggle="collapse" href={"#description" + this.props.index} aria-expanded="false" aria-controls={"#description" + this.props.index}>{block}</a>
-          <div class="collapse" id={"description" + this.props.index}>
-            <div class="card card-body">
+          <div className="collapse" id={"description" + this.props.index}>
+            <div className="card card-body">
               {description} 
             </div>
           </div>
         </td>
         <td>{deadline}</td>
-        <td></td>
+        <td>{collab}</td>
         <td>
            <Status index={this.props.index} 
                    id={this.props.block._id}
