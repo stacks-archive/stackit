@@ -37,8 +37,9 @@ export default class YourStacks extends Component {
     return (
       <div className="stacks">
         <svg width={this.state.width} height={this.state.height}>
-          <Block x={0} y={0}/>
-          <Block x={150} y={150}/>
+          {this.props.blocks.map((block, i) =>
+            <Block block={block}/>
+          )}
         </svg>
       </div>
     );

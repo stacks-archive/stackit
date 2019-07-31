@@ -78,7 +78,7 @@ export default class Status extends Component {
     if (completionLevel === 3) {
       status = <Complete index={this.props.index} completionMessage={this.props.completionMessage} />;
     } else if ((completionLevel === 1 && this.props.username === owner) || (completionLevel === 2 && this.props.username === collaborator)) {
-      status = <PartiallyComplete completionMessage = {this.props.completionMessage}/>
+      status = <PartiallyComplete completionMessage = {this.props.completionMessage} />
     } else {   
       status = <Pending index={this.props.index} 
                         submitMessage={this.state.submitMessage}

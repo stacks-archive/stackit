@@ -9,12 +9,23 @@ export default class Block extends Component {
   	super(props);
 
   	this.state = {
-      x: this.props.x,
-      y: this.props.y
+      x: 30,
+      y: 30,
+      color: '',
     };
+
+    this.loadBlock = this.loadBlock.bind(this);
 
   }
 
+  componentWillMount() {
+    this.loadBlock();
+  }
+
+  loadBlock() {
+    const { xCoord, yCoord } = this.props.block.attrs;
+    this.setState({x: xCoord, y: yCoord});
+  }
 
   handleMouseDown = (e) => {
     this.coords = {
@@ -26,6 +37,12 @@ export default class Block extends Component {
 
   handleMouseUp = () => {
     document.removeEventListener('mousemove', this.handleMouseMove);
+    var newCoord = {
+      xCoord: this.state.x,
+      yCoord: this.state.y,
+    }
+    this.props.block.update(newCoord);
+    this.props.block.save();
   }
 
   handleMouseMove = (e) => {
@@ -46,7 +63,7 @@ export default class Block extends Component {
     return ( 
       <rect x={x} y={y} 
             width="100" height="100" rx="20"
-            fill="#888"
+            fill="#FF0000"
             className="draggable"
             draggable="true"
             onMouseDown={this.handleMouseDown}

@@ -87,6 +87,7 @@ export default class Profile extends Component {
       },
       blocks: [],
       publicInvites: [], 
+      completedBlocks: [],
       previews: [],
       username: ''
     };
@@ -114,12 +115,17 @@ export default class Profile extends Component {
     function isPending(block) {
       return !isAccepted(block);
     }
+    function isComplete(block) {
+      const { completionLevel } = block.attrs;
+      return completionLevel === 3;
+    }
 
     const allBlocks = ownBlocks.concat(collabBlocks);
     const blocks = allBlocks.filter(isAccepted);
     const previews = allBlocks.filter(isPending);
+    const completedBlocks = blocks.filter(isComplete);
 
-    this.setState({ blocks, previews });
+    this.setState({ blocks, previews, completedBlocks });
   }
 
   async load() {
@@ -273,7 +279,7 @@ export default class Profile extends Component {
             render={
               routeProps => <YourStacks
               userSession={this.props.userSession}
-              blocks={this.state.blocks}
+              blocks={this.state.completedBlocks}
               {...routeProps} />
             }
           />
