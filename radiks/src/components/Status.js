@@ -27,8 +27,21 @@ function Complete(props) {
   return (
     <div>
       <a id="blackHref" data-toggle="collapse" href={"#collapseMessage" + props.index} aria-expanded="false" aria-controls={"#collapseMessage" + props.index}>Completed</a>
-      <div class="collapse" id={"collapseMessage" + props.index}>
-        <div class="card card-body">
+      <div className="collapse" id={"collapseMessage" + props.index}>
+        <div className="card card-body">
+          {props.completionMessage}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function PartiallyComplete(props) {
+  return (
+    <div>
+      <a id="blackHref" data-toggle="collapse" href={"#collapsePartialMessage" + props.index} aria-expanded="false" aria-controls={"#collapsePartialMessage" + props.index}>Waiting for collaborator's completion</a>
+      <div className="collapse" id={"collapsePartialMessage" + props.index}>
+        <div className="card card-body">
           {props.completionMessage}
         </div>
       </div>
@@ -61,10 +74,12 @@ export default class Status extends Component {
 
   render() {
     let status;
-    const { completed } = this.props.block.attrs;
-    if (completed) {
+    const { completionLevel, owner, collaborator } = this.props.block.attrs;
+    if (completionLevel === 3) {
       status = <Complete index={this.props.index} completionMessage={this.props.completionMessage} />;
-    } else {
+    } else if ((completionLevel === 1 && this.props.username === owner) || (completionLevel === 2 && this.props.username === collaborator)) {
+      status = <PartiallyComplete completionMessage = {this.props.completionMessage}/>
+    } else {   
       status = <Pending index={this.props.index} 
                         submitMessage={this.state.submitMessage}
                         completeBlock = {this.completeBlock}

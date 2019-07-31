@@ -32,7 +32,8 @@ export default class TableRow extends Component {
                    id={this.props.block._id}
                    completeBlock={this.props.completeBlock}
                    completionMessage={completionMessage}
-                   block={this.props.block}/>
+                   block={this.props.block}
+                   username={this.props.username}/>
         </td>
         <td>
           <a id="blackHref" href="/" onClick={() => this.props.removeBlock(this.props.block._id)}>X</a>

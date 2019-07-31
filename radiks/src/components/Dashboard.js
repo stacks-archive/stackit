@@ -9,7 +9,7 @@ import '../styles/Profile.css'
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
-export default class Dashbaord extends Component {
+export default class Dashboard extends Component {
   constructor(props) {
   	super(props);
 

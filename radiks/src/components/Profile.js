@@ -88,6 +88,7 @@ export default class Profile extends Component {
       blocks: [],
       publicInvites: [], 
       previews: [],
+      username: ''
     };
     
     this.load = this.load.bind(this);
@@ -124,6 +125,7 @@ export default class Profile extends Component {
   async load() {
     const profile = this.props.userSession.loadUserData();
     const username = profile.username; 
+    this.setState({username});
 
     // fetch all the invites that this user has pending
     const invites = await TestInv.fetchList({ invitedUser: username, activated: false });
@@ -199,18 +201,22 @@ export default class Profile extends Component {
 
   async completeBlock(id, message) {
     const block = await TestBl.findById(id);
-    const { completionLevel } = block.attrs
-    const newStatus = completionLevel + 1;
+    const { completionLevel, owner, completionMessage} = block.attrs
+    var newLevel; 
     var newMessage;
-    if (newStatus === 1) {
+    if (completionLevel === 0 && owner === this.state.username) { // 0 means no one has completed
+      newLevel = 1; // 1 means the owner has completed
+      newMessage = message;
+    } else if (completionLevel === 0) {
+      newLevel = 2; // 2 means the collaborator has completed
       newMessage = message;
     }
     else {
-      const { completionMessage } = block.attrs;
+      newLevel = 3; // 3 means both have completed
       newMessage = "1. " + completionMessage + " 2. " + message ;
     }
     var updatedStatus = {
-      completionLevel: newStatus,
+      completionLevel: newLevel,
       completionMessage: newMessage,
     }
     block.update(updatedStatus);
