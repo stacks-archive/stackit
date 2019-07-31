@@ -104,46 +104,20 @@ export default class Profile extends Component {
     const username = profile.username; 
 
     const ownBlocks = await TestBl.fetchList({owner: username}, {decrypt: true});
-    console.log("Fetched ownBlocks");
-    console.log(ownBlocks);
-
     const collabBlocks = await TestBl.fetchList({collaborator: username}, {decrypt: true});
-    console.log("Fetched collabBlocks");
-    console.log(collabBlocks);
 
     function isAccepted(block) {
       const { accepted } = block.attrs;
       return accepted ;
     }
-
     function isPending(block) {
       return !isAccepted(block);
     }
 
     const allBlocks = ownBlocks.concat(collabBlocks);
     const blocks = allBlocks.filter(isAccepted);
-    console.log("Accepted blocks");
-    console.log(blocks);
     const previews = allBlocks.filter(isPending);
-    console.log("Pending blocks");
-    console.log(previews);
 
-    
-
-    // Supposed to fetch blocks this user has created (nothing shows up)
-    //const ownBlocks = await TestBl.fetchList({owner: username, accepted: false}, {decrypt: true});
-
-    //console.log("fetched ownBlocks");
-    //console.log(ownBlocks);
-    
-    // intended to fetch blocks this user has been shared on 
-    //const collabBlocks = await TestBl.fetchList({collaborator: username, accepted: false}, {decrypt: true});
-    //console.log("fetched collabBlocks");
-    //console.log(collabBlocks);
-    //const blocks = ownBlocks.concat(collabBlocks);
- 
-    // fetching blocks the user has been shared on but has not yet accepted
-    //const previews = await TestBl.fetchList({owner: username}, {decrypt: true});
     this.setState({ blocks, previews });
   }
 
@@ -153,22 +127,18 @@ export default class Profile extends Component {
 
     // fetch all the invites that this user has pending
     const invites = await TestInv.fetchList({ invitedUser: username, activated: false });
-    console.log("Fetched inactive invites");
-    console.log(invites);
+
     if (Array.isArray(invites) && invites.length) {
       invites.forEach(async function(invite) {
         const { invitationId } = invite.attrs;      
 
         // activate invitation
         const invitation = await GroupInvitation.findById(invitationId);
-        console.log(invitation);
         await invitation.activate();
-        console.log("activated!")
         invite.update({
           activated: true,
         });
         await invite.save();
-        console.log("Activated an invite and upated invite model");
       });
     }
 
@@ -181,17 +151,13 @@ export default class Profile extends Component {
     const username = profile.username; 
 
     // create UserGroup
-    const blockGroup = new UserGroup({ name: 'dummy name' });
+    const blockGroup = new UserGroup({ name: username + blockArray[0] });
     await blockGroup.create();
     
-    console.log("Created blockGroup");
-
     const collaborator = blockArray[3];
-
 
     // create invitation
     const blockInvitation = await blockGroup.makeGroupMembership(collaborator);
-    console.log("Created group membership");
 
     // create invitation model instance (unencrypted)
     const invite = new TestInv({
@@ -201,8 +167,6 @@ export default class Profile extends Component {
       activated: false
     })
     await invite.save();
-
-    console.log("Saved invite model");
 
     const attrs = {
       block: blockArray[0],
@@ -223,7 +187,6 @@ export default class Profile extends Component {
     // create and save a new block
     const newBlock = new TestBl(attrs);
     await newBlock.save();
-    console.log("Saved block model");
     
     this.load();
   }
