@@ -2,11 +2,7 @@ import React, { Component } from 'react';
 import {
   Person,
 } from 'blockstack';
-import { Switch, Route, Redirect } from 'react-router-dom'
-import { Link } from 'react-router-dom'
 import '../styles/CreateBlock.css'
-import { PreviewInvite, BlockPreview, BlockTest } from './Profile'
-import { GroupInvitation, UserGroup } from 'radiks'
 import InviteRow from './InviteRow'
 
 

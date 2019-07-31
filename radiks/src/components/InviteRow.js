@@ -17,7 +17,7 @@ export default class InviteRow extends Component {
         <td>{owner}
         </td>
         <td>
-          <a id="blackHref" href="#" onClick={() => this.props.acceptBlock(this.props.preview._id)}>Accept</a>
+          <a id="blackHref" href="/" onClick={() => this.props.acceptBlock(this.props.preview._id)}>Accept</a>
         </td>
       </tr>
     );

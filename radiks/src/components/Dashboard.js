@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Person,
 } from 'blockstack';
-import { Switch, Route, Redirect } from 'react-router-dom'
 import SideBar from './SideBar'
 import BlockTable from './BlockTable'
 import '../styles/Profile.css'

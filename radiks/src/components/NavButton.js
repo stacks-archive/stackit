@@ -3,10 +3,6 @@ import { Link } from 'react-router-dom'
 import '../styles/NavButton.css'
 
 export default class Button extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
 
     return (

@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import {
   Person,
 } from 'blockstack';
-import { Switch, Route, Redirect } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import '../styles/CreateBlock.css'
 
 
@@ -49,7 +48,7 @@ export default class CreateBlock extends Component {
     const deadline = this.state.deadline;
     const collaborator = this.state.collaborator;
 
-    if (block != '' && description != '' && deadline != '' && collaborator != '') {
+    if (block !== '' && description !== '' && deadline !== '' && collaborator !== '') {
 
       this.props.addBlock([block,
                            description,
@@ -64,6 +63,8 @@ export default class CreateBlock extends Component {
         redirectToHome: true,
       })
     }
+    //window.location.reload();
+
   
   }
 
@@ -71,6 +72,11 @@ export default class CreateBlock extends Component {
     const redirectToHome = this.state.redirectToHome;
     if (redirectToHome) {
       return <Redirect to="/dash" />
+
+    }
+    else {
+      //window.location.reload();
+
     }
     return (
       <div>
@@ -116,5 +122,7 @@ export default class CreateBlock extends Component {
     this.setState({
       person: new Person(userSession.loadUserData().profile),
     });
+    //window.location.reload();
+
   }
 }

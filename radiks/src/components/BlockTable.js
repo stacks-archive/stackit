@@ -3,10 +3,6 @@ import '../styles/BlockTable.css'
 import TableRow from './TableRow'
 
 export default class BlockTable extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
 
     // <th scope="col">#</th>

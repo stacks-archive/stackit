@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import {
-  Person, doPublicKeysMatchIssuer,
-} from 'blockstack';
 
 
 function Pending(props) {

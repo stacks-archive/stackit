@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import {
-  Person,
-} from 'blockstack';
 
 // https://codepen.io/techniq/pen/yVEeOx?editors=0010
 
