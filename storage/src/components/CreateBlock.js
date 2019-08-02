@@ -25,7 +25,6 @@ export default class CreateBlock extends Component {
       block: '',
       description: '',
       deadline: '',
-      collaborator: '',  
       redirectToHome: false, 
     };
     
@@ -47,21 +46,18 @@ export default class CreateBlock extends Component {
     const block = this.state.block;
     const description = this.state.description;
     const deadline = this.state.deadline;
-    const collaborator = this.state.collaborator;
 
-    if (block != '' && description != '' && deadline != '' && collaborator != '') {
+    if (block != '' && description != '' && deadline != '') {
 
       this.props.addBlock([block,
                            description,
                            deadline,
-                           false,
-                           collaborator]);
+                           false]);
 
       this.setState({
         block: '',
         description: '',
         deadline: '',
-        collaborator, '',
         redirectToHome: true,
       })
     }
@@ -98,12 +94,6 @@ export default class CreateBlock extends Component {
                    value={this.state.deadline}
                    onChange={this.handleChange}
                    placeholder="Description"></input>
-            <input type="text" 
-                   className="form-control" 
-                   name="collaborator" 
-                   value={this.state.collaborator}
-                   onChange={this.handleChange}
-                   placeholder="Collaborator's Blockstack ID"></input>
             <input type="submit" className="btn btn-primary" value="Create block"/>
           </form>
         </div>

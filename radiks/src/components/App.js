@@ -21,10 +21,6 @@ export default class App extends Component {
     if (userSession.isSignInPending()) {
       await userSession.handlePendingSignIn();
       await User.createWithCurrentUser();
-      // const user = await User.createWithCurrentuser();
-      // await GroupMembership.cacheKeys();
-      // await user.save();
-      // 
       window.location = '/';
     }
     userSession.redirectToSignIn();
@@ -57,11 +53,6 @@ export default class App extends Component {
     const { userSession } = getConfig();
     if (userSession.isSignInPending()) {
       await userSession.handlePendingSignIn();
-      //await User.createWithCurrentUser();
-      // const user = await User.createWithCurrentuser();
-      // await GroupMembership.cacheKeys();
-      // await user.save();
-      // 
       window.location = '/';
     }
   }

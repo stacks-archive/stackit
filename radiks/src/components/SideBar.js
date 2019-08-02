@@ -9,6 +9,7 @@ export default class SideBar extends Component {
         <NavButton name="Create block" link="/create"/> 
         <NavButton name="View your stacks" link="/stacks" />
         <NavButton name="View blocks awaiting acceptance" link="/invitations" />
+        <NavButton name="View all users' stacks" link="/all-stacks" />
       </div>
     );
   }
