@@ -100,6 +100,8 @@ export default class Profile extends Component {
     this.completeBlock = this.completeBlock.bind(this);
     this.loadUpdates = this.loadUpdates.bind(this);
     this.acceptBlock = this.acceptBlock.bind(this);
+    this.editBlockName = this.editBlockName.bind(this);
+    this.editBlockDesc = this.editBlockDesc.bind(this);
 
   }
 
@@ -186,7 +188,7 @@ export default class Profile extends Component {
       deadline: blockArray[2],
       owner: username,
       collaborator: collaborator,
-      color: 'blue',
+      color: blockArray[4],
       completionMessage: '',
       xCoord: 0,
       yCoord: 0,
@@ -240,10 +242,27 @@ export default class Profile extends Component {
       accepted: true
     })
     await block.save();
-    console.log("accepted block!");
-    console.log(block);
     this.loadUpdates();
   }
+
+  async editBlockName(id, blockName) {
+    const block = await TestBl.findById(id);
+    block.update({
+      block: blockName
+    });
+    await block.save();
+    this.loadUpdates();
+  }
+
+  async editBlockDesc(id, blockDesc) {
+    const block = await TestBl.findById(id);
+    block.update({
+      description: blockDesc
+    });
+    await block.save();
+    this.loadUpdates();
+  }
+
 
   render() {
     const { person } = this.state;
@@ -266,6 +285,8 @@ export default class Profile extends Component {
               blocks={this.state.blocks}
               removeBlock={this.removeBlock}
               completeBlock={this.completeBlock}
+              editBlockName={this.editBlockName}
+              editBlockDesc={this.editBlockDesc}
               {...routeProps} />
             }
           />
@@ -297,6 +318,15 @@ export default class Profile extends Component {
               {...routeProps} />
             }
           /> 
+          <Route
+            path='/all-stacks'
+            render={
+              routeProps => <YourStacks
+              userSession={this.props.userSession}
+              blocks={this.state.completedBlocks}
+              {...routeProps} />
+            }
+          />
 
         </Switch>
       </div>

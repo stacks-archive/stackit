@@ -25,6 +25,7 @@ export default class CreateBlock extends Component {
       description: '',
       deadline: '',  
       collaborator: '',
+      color: '#000000',
       redirectToHome: false, 
     };
     
@@ -47,19 +48,22 @@ export default class CreateBlock extends Component {
     const description = this.state.description;
     const deadline = this.state.deadline;
     const collaborator = this.state.collaborator;
+    const color = this.state.color;
 
     if (block !== '' && description !== '' && deadline !== '' && collaborator !== '') {
 
       this.props.addBlock([block,
                            description,
                            deadline,
-                           collaborator]);
+                           collaborator,
+                           color]);
 
       this.setState({
         block: '',
         description: '',
         deadline: '',
         collaborator: '',
+        color: '#000000',
         redirectToHome: true,
       })
     }
@@ -110,7 +114,14 @@ export default class CreateBlock extends Component {
                    value={this.state.deadline}
                    onChange={this.handleChange}
                    placeholder="Description"></input>
+            <label for="color">Block color</label>
+            <input type="color" 
+                   name="color" 
+                   className="form-control" 
+                   id="color"
+                   onChange={this.handleChange}></input>
             <input type="submit" className="btn btn-primary" value="Create block"/>
+   
           </form>
         </div>
       </div>

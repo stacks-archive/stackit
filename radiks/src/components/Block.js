@@ -23,8 +23,10 @@ export default class Block extends Component {
   }
 
   loadBlock() {
-    const { xCoord, yCoord } = this.props.block.attrs;
-    this.setState({x: xCoord, y: yCoord});
+    const { xCoord, yCoord, color } = this.props.block.attrs;
+    console.log("color");
+    console.log(color);
+    this.setState({x: xCoord, y: yCoord, color});
   }
 
   handleMouseDown = (e) => {
@@ -59,16 +61,17 @@ export default class Block extends Component {
   
 
   render() {
-    const { x, y } = this.state;
+    const { x, y, color } = this.state;
     return ( 
       <rect x={x} y={y} 
             width="100" height="100" rx="20"
-            fill="#FF0000"
+            fill={color}
             className="draggable"
             draggable="true"
             onMouseDown={this.handleMouseDown}
             onMouseUp={this.handleMouseUp}
       />
+
     );
   }
 }

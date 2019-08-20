@@ -21,9 +21,6 @@ function Accept(props) {
 
 
 export default class InviteStatus extends Component {
-
-  
-
   render() {
     let status;
     const owned = (this.props.owner === this.props.username);
@@ -40,6 +37,4 @@ export default class InviteStatus extends Component {
       </div>
     );
   }
-
- 
 }

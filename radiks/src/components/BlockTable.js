@@ -16,6 +16,7 @@ export default class BlockTable extends Component {
             <th scope="col">Collaborator(s)</th>
             <th scope="col">Status</th>
             <th scope="col">Remove</th>
+            <th scope="col">Edit</th>
           </tr>
         </thead>
         <tbody>
@@ -24,7 +25,9 @@ export default class BlockTable extends Component {
                       index={i} 
                       removeBlock={this.props.removeBlock}
                       completeBlock={this.props.completeBlock}
-                      username={this.props.username}/>
+                      username={this.props.username}
+                      editBlockName={this.props.editBlockName}
+                      editBlockDesc={this.props.editBlockDesc}/>
           )}
         </tbody>
       </table>

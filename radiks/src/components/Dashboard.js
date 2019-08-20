@@ -39,7 +39,9 @@ export default class Dashboard extends Component {
           <BlockTable blocks={this.props.blocks} 
                       removeBlock={this.props.removeBlock} 
                       completeBlock={this.props.completeBlock}
-                      username={username} /> 
+                      username={username}
+                      editBlockName={this.props.editBlockName}
+                      editBlockDesc={this.props.editBlockDesc} /> 
         </div>
       </div>
     );

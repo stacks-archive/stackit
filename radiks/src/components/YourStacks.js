@@ -5,6 +5,7 @@ import {
 import '../styles/YourStacks.css'
 import Block from './Block'
 
+
 // https://codepen.io/techniq/pen/yVEeOx?editors=0010
 
 // referenced http://www.petercollingridge.co.uk/tutorials/svg/interactive/dragging/
@@ -36,11 +37,13 @@ export default class YourStacks extends Component {
   render() {
     return (
       <div className="stacks">
-        <svg width={this.state.width} height={this.state.height}>
-          {this.props.blocks.map((block, i) =>
-            <Block block={block}/>
-          )}
-        </svg>
+        <g>
+          <svg width={this.state.width} height={this.state.height}>
+            {this.props.blocks.map((block, i) =>
+              <Block block={block} userSession={this.props.userSession}/>
+            )}
+          </svg>
+        </g>
       </div>
     );
   }
