@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 
 
 
-export default class Block extends Component {
+export default class StaticBlock extends Component {
   constructor(props) {
   	super(props);
 
@@ -71,7 +71,6 @@ export default class Block extends Component {
             onMouseDown={this.handleMouseDown}
             onMouseUp={this.handleMouseUp}
       />
-
     );
   }
 }

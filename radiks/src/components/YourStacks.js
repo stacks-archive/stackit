@@ -4,7 +4,7 @@ import {
 } from 'blockstack';
 import '../styles/YourStacks.css'
 import Block from './Block'
-
+import StaticBlock from './StaticBlock'
 
 // https://codepen.io/techniq/pen/yVEeOx?editors=0010
 
@@ -35,17 +35,29 @@ export default class YourStacks extends Component {
   }
 
   render() {
-    return (
-      <div className="stacks">
-        <g>
+    if (this.props.all) {
+      return (
+        <div className="stacks">
           <svg width={this.state.width} height={this.state.height}>
             {this.props.blocks.map((block, i) =>
-              <Block block={block} userSession={this.props.userSession}/>
+              <StaticBlock block={block} width={this.state.width} height={this.state.height}/>
             )}
           </svg>
-        </g>
-      </div>
-    );
+        </div>
+      );
+    }
+    else {
+      return (
+        <div className="stacks">
+          <svg width={this.state.width} height={this.state.height}>
+            {this.props.blocks.map((block, i) =>
+              <Block block={block}/>
+            )}
+          </svg>
+        </div>
+      );
+    }
+    
   }
 
   componentWillMount() {

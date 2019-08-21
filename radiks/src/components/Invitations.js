@@ -28,7 +28,6 @@ export default class Invitations extends Component {
   render() {
     const profile = this.props.userSession.loadUserData();
     const username = profile.username; 
-    console.log("Invitations.js")
     return (
       <div className="col-sm-11">
         <table className="table table-hover">
@@ -45,6 +44,11 @@ export default class Invitations extends Component {
             {this.props.previews.map((preview, i) =>
               <InviteRow preview={preview}
                          acceptBlock={this.props.acceptBlock}
+                         username={username} />
+            )}
+            {this.props.publicBlocks.map((preview, i) =>
+              <InviteRow preview={preview}
+                         acceptBlock={this.props.pickUpBlock}
                          username={username} />
             )}
           </tbody>

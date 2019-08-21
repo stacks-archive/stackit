@@ -26,6 +26,7 @@ export default class CreateBlock extends Component {
       deadline: '',  
       collaborator: '',
       color: '#000000',
+      noCollab: false,
       redirectToHome: false, 
     };
     
@@ -47,11 +48,15 @@ export default class CreateBlock extends Component {
     const block = this.state.block;
     const description = this.state.description;
     const deadline = this.state.deadline;
-    const collaborator = this.state.collaborator;
+    var collaborator = this.state.collaborator;
     const color = this.state.color;
+    const noCollab = this.state.noCollab
 
-    if (block !== '' && description !== '' && deadline !== '' && collaborator !== '') {
+    if (block !== '' && description !== '' && deadline !== '' && (collaborator !== '' || noCollab)) {
 
+      if (noCollab) {
+        collaborator = false
+      }
       this.props.addBlock([block,
                            description,
                            deadline,
@@ -67,6 +72,7 @@ export default class CreateBlock extends Component {
         redirectToHome: true,
       })
     }
+
     //window.location.reload();
 
   
@@ -107,6 +113,16 @@ export default class CreateBlock extends Component {
                    onChange={this.handleChange}
                    placeholder="Collaborator's Blockstack ID">
             </input>
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   value={this.state.noCollab} 
+                   id="noCollab" 
+                   name="noCollab"
+                   onChange={this.handleChange}></input>
+            <label class="form-check-label" for="noCollab">
+              No collaborator
+            </label>
+            <br></br>
             <label for="date">Deadline</label>
             <input type="date" 
                    className="form-control" 
