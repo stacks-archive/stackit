@@ -8,6 +8,7 @@ import Dashboard from './Dashboard'
 import CreateBlock from './CreateBlock'
 import YourStacks from './YourStacks'
 import Invitations from './Invitations'
+import About from './About'
 import '../styles/Profile.css'
 import { Model, UserGroup, GroupInvitation } from 'radiks';
 
@@ -403,6 +404,13 @@ export default class Profile extends Component {
               userSession={this.props.userSession}
               blocks={this.state.allUserCompleted}
               all={true}
+              {...routeProps} />
+            }
+          />
+          <Route
+            path='/about'
+            render={
+              routeProps => <About
               {...routeProps} />
             }
           />

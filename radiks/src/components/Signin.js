@@ -6,6 +6,7 @@ export default class Signin extends Component {
     const { handleSignIn } = this.props;
 
     return (
+      
       <div className="panel-landing" id="section-1">
         <h1 className="landing-heading">Stackit</h1>
         <br/>
