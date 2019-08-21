@@ -9,7 +9,7 @@ export default class Signin extends Component {
           <p align="left">
             Stackit is a tutorial app for Blockstack meant to demonstrate its app generator;
             authentication process; storage (Gaia); and a framework for indexing, querying, and 
-            sharing data (Radiks). It was created in the summer of 2019.
+            sharing data (Radiks).
           </p>
           <p align="left">
             The app is made for gamified collaboration. Users can create blocks, invite others
