@@ -3,7 +3,6 @@ import {
   Person,
 } from 'blockstack';
 import { Redirect } from 'react-router-dom'
-import from 'react-router-dom'
 import '../styles/CreateBlock.css'
 
 

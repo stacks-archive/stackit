@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import from 'blockstack';
 
 
 function Pending(props) {
