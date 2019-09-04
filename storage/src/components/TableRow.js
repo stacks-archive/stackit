@@ -3,12 +3,6 @@ import '../styles/TableRow.css'
 import Status from './Status'
 
 export default class TableRow extends Component {
-  constructor(props) {
-    super(props);
-
-  }
-  
-
 
   render() {
     return (
@@ -17,7 +11,7 @@ export default class TableRow extends Component {
         <a id="blackHref" data-toggle="collapse" href={"#description" + this.props.index} aria-expanded="false" aria-controls={"#description" + this.props.index}>{this.props.block[0]}</a>
           <div class="collapse" id={"description" + this.props.index}>
             <div class="card card-body">
-              {this.props.block[1]} 
+              {this.props.block[1]}
             </div>
           </div>
         </td>

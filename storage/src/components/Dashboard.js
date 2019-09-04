@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   Person,
 } from 'blockstack';
-import { Switch, Route, Redirect } from 'react-router-dom'
+import from 'react-router-dom'
 import SideBar from './SideBar'
 import BlockTable from './BlockTable'
 import '../styles/Profile.css'
@@ -23,10 +23,10 @@ export default class Dashbaord extends Component {
   	  	  return avatarFallbackImage;
   	  	},
   	  },
-    }; 
+    };
   }
 
-  
+
 
   render() {
     return (
@@ -35,9 +35,9 @@ export default class Dashbaord extends Component {
           <SideBar />
         </div>
         <div className="col-sm-8">
-          <BlockTable blocks={this.props.blocks} 
-                      removeBlock={this.props.removeBlock} 
-                      completeBlock={this.props.completeBlock} /> 
+          <BlockTable blocks={this.props.blocks}
+                      removeBlock={this.props.removeBlock}
+                      completeBlock={this.props.completeBlock} />
         </div>
       </div>
     );

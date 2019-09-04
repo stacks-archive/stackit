@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   Person,
 } from 'blockstack';
-import { Switch, Route, Redirect } from 'react-router-dom'
+import from 'react-router-dom'
 import '../styles/YourStacks.css'
 import Block from './Block'
 
@@ -29,7 +29,7 @@ export default class YourStacks extends Component {
       },
       width: '',
       height: '',
-    };  
+    };
 
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }

@@ -3,9 +3,6 @@ import '../styles/BlockTable.css'
 import TableRow from './TableRow'
 
 export default class BlockTable extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   render() {
 
@@ -24,8 +21,8 @@ export default class BlockTable extends Component {
         </thead>
         <tbody>
           {this.props.blocks.map((block, i) =>
-            <TableRow block={block} 
-                      index={i} 
+            <TableRow block={block}
+                      index={i}
                       removeBlock={this.props.removeBlock}
                       completeBlock={this.props.completeBlock}/>
           )}
