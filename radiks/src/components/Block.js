@@ -1,23 +1,33 @@
 import React, { Component } from 'react';
-import {
-  Person,
-} from 'blockstack';
 
 // https://codepen.io/techniq/pen/yVEeOx?editors=0010
 
 
 
-export default class Block extends Component {
+export default class StaticBlock extends Component {
   constructor(props) {
   	super(props);
 
   	this.state = {
-      x: this.props.x,
-      y: this.props.y
+      x: 30,
+      y: 30,
+      color: '',
     };
+
+    this.loadBlock = this.loadBlock.bind(this);
 
   }
 
+  componentWillMount() {
+    this.loadBlock();
+  }
+
+  loadBlock() {
+    const { xCoord, yCoord, color } = this.props.block.attrs;
+    console.log("color");
+    console.log(color);
+    this.setState({x: xCoord, y: yCoord, color});
+  }
 
   handleMouseDown = (e) => {
     this.coords = {
@@ -29,6 +39,12 @@ export default class Block extends Component {
 
   handleMouseUp = () => {
     document.removeEventListener('mousemove', this.handleMouseMove);
+    var newCoord = {
+      xCoord: this.state.x,
+      yCoord: this.state.y,
+    }
+    this.props.block.update(newCoord);
+    this.props.block.save();
   }
 
   handleMouseMove = (e) => {
@@ -45,11 +61,11 @@ export default class Block extends Component {
   
 
   render() {
-    const { x, y } = this.state;
+    const { x, y, color } = this.state;
     return ( 
       <rect x={x} y={y} 
             width="100" height="100" rx="20"
-            fill="#888"
+            fill={color}
             className="draggable"
             draggable="true"
             onMouseDown={this.handleMouseDown}

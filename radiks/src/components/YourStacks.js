@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import {
   Person,
 } from 'blockstack';
-import { Switch, Route, Redirect } from 'react-router-dom'
 import '../styles/YourStacks.css'
 import Block from './Block'
+import StaticBlock from './StaticBlock'
 
 // https://codepen.io/techniq/pen/yVEeOx?editors=0010
 
@@ -35,14 +35,29 @@ export default class YourStacks extends Component {
   }
 
   render() {
-    return (
-      <div className="stacks">
-        <svg width={this.state.width} height={this.state.height}>
-          <Block x={0} y={0}/>
-          <Block x={150} y={150}/>
-        </svg>
-      </div>
-    );
+    if (this.props.all) {
+      return (
+        <div className="stacks">
+          <svg width={this.state.width} height={this.state.height}>
+            {this.props.blocks.map((block, i) =>
+              <StaticBlock block={block} width={this.state.width} height={this.state.height}/>
+            )}
+          </svg>
+        </div>
+      );
+    }
+    else {
+      return (
+        <div className="stacks">
+          <svg width={this.state.width} height={this.state.height}>
+            {this.props.blocks.map((block, i) =>
+              <Block block={block}/>
+            )}
+          </svg>
+        </div>
+      );
+    }
+    
   }
 
   componentWillMount() {

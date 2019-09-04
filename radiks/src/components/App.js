@@ -2,13 +2,8 @@ import React, { Component } from 'react';
 import Profile from './Profile.js';
 import Signin from './Signin.js';
 import { appConfig } from '../constants'
-import { User, getConfig, configure } from 'radiks';
-
-
-import {
-  UserSession,
-  AppConfig
-} from 'blockstack';
+import { User, getConfig, configure, } from 'radiks';
+import { UserSession } from 'blockstack';
 
 
 
@@ -20,9 +15,14 @@ export default class App extends Component {
 
   }
 
-  handleSignIn(e) {
+  async handleSignIn(e) {
     const { userSession } = getConfig();
     e.preventDefault();
+    if (userSession.isSignInPending()) {
+      await userSession.handlePendingSignIn();
+      await User.createWithCurrentUser();
+      window.location = '/';
+    }
     userSession.redirectToSignIn();
   }
 
@@ -53,7 +53,6 @@ export default class App extends Component {
     const { userSession } = getConfig();
     if (userSession.isSignInPending()) {
       await userSession.handlePendingSignIn();
-      await User.createWithCurrentUser();
       window.location = '/';
     }
   }

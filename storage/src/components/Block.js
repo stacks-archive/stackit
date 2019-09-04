@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Person,
-} from 'blockstack';
+import from 'blockstack';
 
 // https://codepen.io/techniq/pen/yVEeOx?editors=0010
 
@@ -42,12 +40,12 @@ export default class Block extends Component {
     })
   }
 
-  
+
 
   render() {
     const { x, y } = this.state;
-    return ( 
-      <rect x={x} y={y} 
+    return (
+      <rect x={x} y={y}
             width="100" height="100" rx="20"
             fill="#888"
             className="draggable"

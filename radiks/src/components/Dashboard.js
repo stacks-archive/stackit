@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Person,
 } from 'blockstack';
-import { Switch, Route, Redirect } from 'react-router-dom'
 import SideBar from './SideBar'
 import BlockTable from './BlockTable'
 import '../styles/Profile.css'
@@ -10,7 +9,7 @@ import '../styles/Profile.css'
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
-export default class Dashbaord extends Component {
+export default class Dashboard extends Component {
   constructor(props) {
   	super(props);
 
@@ -29,6 +28,8 @@ export default class Dashbaord extends Component {
   
 
   render() {
+    const profile = this.props.userSession.loadUserData();
+    const username = profile.username; 
     return (
       <div className="row">
         <div className="col-sm-3">
@@ -37,7 +38,10 @@ export default class Dashbaord extends Component {
         <div className="col-sm-8">
           <BlockTable blocks={this.props.blocks} 
                       removeBlock={this.props.removeBlock} 
-                      completeBlock={this.props.completeBlock} /> 
+                      completeBlock={this.props.completeBlock}
+                      username={username}
+                      editBlockName={this.props.editBlockName}
+                      editBlockDesc={this.props.editBlockDesc} /> 
         </div>
       </div>
     );

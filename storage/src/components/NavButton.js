@@ -3,15 +3,12 @@ import { Link } from 'react-router-dom'
 import '../styles/NavButton.css'
 
 export default class Button extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
 
     return (
-      <Link to={this.props.link} 
-            className="btn btn-primary" 
+      <Link to={this.props.link}
+            className="btn btn-primary"
             id="nav-button">
             {this.props.name}
       </Link>

@@ -8,78 +8,104 @@ import Dashboard from './Dashboard'
 import CreateBlock from './CreateBlock'
 import YourStacks from './YourStacks'
 import Invitations from './Invitations'
+import About from './About'
 import '../styles/Profile.css'
-import { Model, UserGroup } from 'radiks';
+import { Model, UserGroup, GroupInvitation } from 'radiks';
 
 
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
-
-// want to send an invite that auto-accepts
-// then query for Invites that you're now shared on that have a little more info you have to accept
-// we have two layers because we want someone accepting a block invite to know info like
-// the owner, task, and deadline, but we don't want anyone who queries for that user to be able
-// to see it, since the username is non-encrypted for the end-user to be able to access
-// to be able to access the block
-
-// how do you pass the group id used to query for other models associated with that id
-
-class PreviewInvite extends Model {
-  static className = 'PreviewInvite';
+// Don't want to clutter the final models with buggy instances so this is a test model
+// This model represents an invite to a UserGroup
+// All fields are decrypted
+class StackitInvitation extends Model {
+  static className = 'StackitInvitation';
 
   static schema = {
     invitedUser: {
       type: String,
-      decrypted: true
+      decrypted: true,
     },
     invitationId: {
       type: String,
       decrypted: true
     },
-    inviteGroupId: {
+    blockUserGroupId: {
       type: String,
+      decrypted: true
+    },
+    activated: {
+      type: Boolean,
       decrypted: true
     }
   }
 }
 
-class BlockPreview extends Model {
-  static className = 'AdvertiseBlock'
-  
-  static schema = {
-    block: String, // first four used to preview block before invited user accepts
-    description: String,
-    deadline: String,
-    owner: String,
-    invitedUser: String, // used to query for all BlockPreviews for this user that have been activated
-    activated: Boolean,
-    userGroupId: String, // used to find this preview based on the previewinvite
-    invitationId: String, // id of the invite for the actual block
-    blockGroupId: String // used to find the userGroup of the block associated with this preview / invitationId
-  }
-}
-
-class BlockTest extends Model {
-
-  static className = 'BlockTest';
+class StackitBlock extends Model {
+  static className = 'StackitBlock';
 
   static schema = {
     block: String,
     description: String,
     deadline: String,
+    owner: {
+      type: String,
+      decrypted: true
+    },
+    collaborator: {
+      type: String,
+      decrypted: true
+    },
     color: {
       type: String,
       decrypted: true
     },
-    completed: Number, // 0 for none, 1 for one checked off, 2 for completed
     completionMessage: String,
+    xCoord: Number,
+    yCoord: Number,
     accepted: Boolean,
-    userGroupId: String,
-    owner: String,
-    collaborator: String,
+    completionLevel: {
+      type: Number,
+      decrypted: true
+    } // make this publci
+    //userGroupId: String,
   }
 }
+
+class BlockAd extends Model {
+  static className = 'BlockAd';
+
+  static schema = {
+    block: {
+      type: String,
+      decrypted: true
+    },
+    description: {
+      type: String,
+      decrypted: true
+    },
+    deadline: {
+      type: String,
+      decrypted: true
+    },
+    owner: {
+      type: String,
+      decrypted: true
+    },
+    color: {
+      type: String,
+      decrypted: true
+    },
+    picked: {
+      type: Boolean,
+      decrypted: true
+    }
+  }
+}
+
+
+
 
 export default class Profile extends Component {
   constructor(props) {
@@ -96,28 +122,84 @@ export default class Profile extends Component {
       },
       blocks: [],
       publicInvites: [], 
-      invites: [],
+      completedBlocks: [],
+      previews: [],
+      username: '',
+      allUserCompleted: [],
+      publicBlocks: []
     };
     
-    this.load= this.load.bind(this);
+    this.load = this.load.bind(this);
     this.addBlock = this.addBlock.bind(this);
     this.removeBlock = this.removeBlock.bind(this);
     this.completeBlock = this.completeBlock.bind(this);
+    this.loadUpdates = this.loadUpdates.bind(this);
+    this.acceptBlock = this.acceptBlock.bind(this);
+    this.editBlockName = this.editBlockName.bind(this);
+    this.editBlockDesc = this.editBlockDesc.bind(this);
+    this.pickUpBlock = this.pickUpBlock.bind(this);
 
   }
 
-
-  async load() {
-    const ownBlocks = await BlockTest.fetchOwnList({ accepted: true });
+  async loadUpdates() {
     const profile = this.props.userSession.loadUserData();
     const username = profile.username; 
 
-    const collabBlocks = await BlockTest.fetchList({ collaborator: username })
-    const blocks = ownBlocks.concat(collabBlocks);
-    const invites = await PreviewInvite.fetchList({invitedUser: username});
-    console.log("Profile");
-    console.log(invites);
-    this.setState({ blocks, invites});
+    const ownBlocks = await StackitBlock.fetchList({owner: username}, {decrypt: true});
+    const collabBlocks = await StackitBlock.fetchList({collaborator: username}, {decrypt: true});
+
+    const allUserBlocks = await StackitBlock.fetchList({ });
+
+    function isAccepted(block) {
+      const { accepted } = block.attrs;
+      return accepted ;
+    }
+    function isPending(block) {
+      return !isAccepted(block);
+    }
+    function isComplete(block) {
+      const { completionLevel } = block.attrs;
+      return completionLevel === 3;
+    }
+
+    // fetch all public blocks
+    const publicBlocks = await BlockAd.fetchList({ picked: false });
+    console.log(publicBlocks);
+
+
+    const allBlocks = ownBlocks.concat(collabBlocks);
+    const blocks = allBlocks.filter(isAccepted);
+    const previews = allBlocks.filter(isPending);
+    const completedBlocks = blocks.filter(isComplete);
+    const allUserCompleted = allUserBlocks.filter(isComplete)
+
+    this.setState({ blocks, previews, completedBlocks, allUserCompleted, publicBlocks });
+  }
+
+  async load() {
+    const profile = this.props.userSession.loadUserData();
+    const username = profile.username; 
+    this.setState({username});
+
+    // fetch all the invites that this user has pending
+    const invites = await StackitInvitation.fetchList({ invitedUser: username, activated: false });
+
+
+    if (Array.isArray(invites) && invites.length) {
+      invites.forEach(async function(invite) {
+        const { invitationId } = invite.attrs;      
+
+        // activate invitation
+        const invitation = await GroupInvitation.findById(invitationId);
+        await invitation.activate();
+        invite.update({
+          activated: true,
+        });
+        await invite.save();
+      });
+    }
+
+    this.loadUpdates();
   }
 
 
@@ -125,78 +207,138 @@ export default class Profile extends Component {
     const profile = this.props.userSession.loadUserData();
     const username = profile.username; 
 
-    //const blockGroup = new UserGroup({ name: blockArray[0] + username });
-    //await blockGroup.create();
-    //console.log("created blockGroup")
+    if (!blockArray[3]) {
+      console.log("Making ad!")
+      const ad = new BlockAd({
+        block: blockArray[0],
+        description: blockArray[1],
+        deadline: blockArray[2],
+        owner: username,
+        color: blockArray[4],
+        picked: false
+      })
+      await ad.save();
+    }
+    else {
+      console.log("adding block!")
+      // create UserGroup
+      const blockGroup = new UserGroup({ name: username + blockArray[0] });
+      await blockGroup.create();
+      
+      const collaborator = blockArray[3];
 
-    const previewGroup = new UserGroup({ name: username});
-    await previewGroup.create();
-    console.log("created previewGroup")
+      // create invitation
+      const blockInvitation = await blockGroup.makeGroupMembership(collaborator);
 
-    const collaborator = blockArray[3];
-    //const blockInvitation = await blockGroup.makeGroupMembership(collaborator);
-    const previewInvitation = await previewGroup.makeGroupMembership(collaborator);
-    console.log("made both group memberships")
-    
-    //const block = new BlockTest({
-    //  block: blockArray[0],
-    //  description: blockArray[1],
-    //  deadline: blockArray[2],
-    //  completed: 0,
-    //  accepted: false,
-    //  owner: username,
-    //  userGroupId: blockGroup._id
-    //})
-    //await block.save();
-    //console.log("saved block")
- 
+      // create invitation model instance (unencrypted)
+      const invite = new StackitInvitation({
+        invitedUser: collaborator,
+        invitationId: blockInvitation._id,
+        blockUserGroupId: blockGroup._id,
+        activated: false
+      })
+      await invite.save();
 
-    const previewInvite = new PreviewInvite({
-      invitedUser: collaborator,
-      invitationId: previewInvitation._id,
-      inviteGroupId: previewGroup._id
+      const attrs = {
+        block: blockArray[0],
+        description: blockArray[1],
+        deadline: blockArray[2],
+        owner: username,
+        collaborator: collaborator,
+        color: blockArray[4],
+        completionMessage: '',
+        xCoord: 0,
+        yCoord: 0,
+        accepted: false,
+        completionLevel: 0,
+      }
+
+      attrs.userGroupId = blockGroup._id;
+
+      // create and save a new block
+      const newBlock = new StackitBlock(attrs);
+      await newBlock.save();
+      
+      this.load();
+
+    }
+  }
+
+  async pickUpBlock(id) {
+    const blockAd = await BlockAd.findById(id);
+    blockAd.update({
+      picked: true
     })
-    await previewInvite.save();
-    console.log("saved previewInvite")
+    await blockAd.save();
+    const { block, description, deadline, owner, color } = blockAd.attrs;
 
-    const blockPreview = new BlockPreview({
-      block: blockArray[0],
-      description: blockArray[1],
-      deadline: blockArray[2],
-      owner: username,
-      invitedUser: collaborator,
-      activated: true,
-      userGroupId: previewGroup._id,
-      //invitationId: blockInvitation._id
-      //blockGroupId: blockGroup._id
+    this.addBlock([block,
+                   description,
+                   deadline,
+                   owner,
+                   color])
 
-    })
-    await blockPreview.save();
-    console.log("saved blockPreview")
 
-    this.load();
   }
 
   async removeBlock(id) {
-    const block = await BlockTest.findById(id);
+    const block = await StackitBlock.findById(id);
     await block.destroy();
-    this.load();
+    this.loadUpdates();
   }
 
   async completeBlock(id, message) {
-    const block = await BlockTest.findById(id);
-    const { completed } = block.attrs
-    const newStatus = completed + 1;
-    const updatedStatus = {
-      completed: newStatus,
-      completionMessage: message,
+    const block = await StackitBlock.findById(id);
+    const { completionLevel, owner, completionMessage} = block.attrs
+    var newLevel; 
+    var newMessage;
+    if (completionLevel === 0 && owner === this.state.username) { // 0 means no one has completed
+      newLevel = 1; // 1 means the owner has completed
+      newMessage = message;
+    } else if (completionLevel === 0) {
+      newLevel = 2; // 2 means the collaborator has completed
+      newMessage = message;
+    }
+    else {
+      newLevel = 3; // 3 means both have completed
+      newMessage = "1. " + completionMessage + " 2. " + message ;
+    }
+    var updatedStatus = {
+      completionLevel: newLevel,
+      completionMessage: newMessage,
     }
     block.update(updatedStatus);
     await block.save();
-    this.load();
+    this.loadUpdates();
   }
 
- 
+  async acceptBlock(id) {
+    const block = await StackitBlock.findById(id);
+    block.update({
+      accepted: true
+    })
+    await block.save();
+    this.loadUpdates();
+  }
+
+  async editBlockName(id, blockName) {
+    const block = await StackitBlock.findById(id);
+    block.update({
+      block: blockName
+    });
+    await block.save();
+    this.loadUpdates();
+  }
+
+  async editBlockDesc(id, blockDesc) {
+    const block = await StackitBlock.findById(id);
+    block.update({
+      description: blockDesc
+    });
+    await block.save();
+    this.loadUpdates();
+  }
+
 
   render() {
     const { person } = this.state;
@@ -219,6 +361,8 @@ export default class Profile extends Component {
               blocks={this.state.blocks}
               removeBlock={this.removeBlock}
               completeBlock={this.completeBlock}
+              editBlockName={this.editBlockName}
+              editBlockDesc={this.editBlockDesc}
               {...routeProps} />
             }
           />
@@ -236,7 +380,8 @@ export default class Profile extends Component {
             render={
               routeProps => <YourStacks
               userSession={this.props.userSession}
-              blocks={this.state.blocks}
+              blocks={this.state.completedBlocks}
+              all={false}
               {...routeProps} />
             }
           />
@@ -245,11 +390,31 @@ export default class Profile extends Component {
             render={
               routeProps => <Invitations
               userSession={this.props.userSession}
-              publicInvites={this.state.publicInvites}
-              invites={this.state.invites}
+              previews={this.state.previews}
+              acceptBlock={this.acceptBlock}
+              publicBlocks={this.state.publicBlocks}
+              pickUpBlock={this.pickUpBlock}
               {...routeProps} />
             }
           /> 
+          <Route
+            path='/all-stacks'
+            render={
+              routeProps => <YourStacks
+              userSession={this.props.userSession}
+              blocks={this.state.allUserCompleted}
+              all={true}
+              {...routeProps} />
+            }
+          />
+          <Route
+            path='/about'
+            render={
+              routeProps => <About
+              {...routeProps} />
+            }
+          />
+
         </Switch>
       </div>
     );
@@ -264,4 +429,4 @@ export default class Profile extends Component {
   }
 }
 
-export { BlockTest, PreviewInvite, BlockPreview };
+export { StackitInvitation, StackitBlock };

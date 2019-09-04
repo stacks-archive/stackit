@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import {
   Person,
 } from 'blockstack';
-import { Switch, Route, Redirect } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import '../styles/CreateBlock.css'
 
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 
-export default class Dashbaord extends Component {
+export default class CreateBlock extends Component {
   constructor(props) {
   	super(props);
 
@@ -26,6 +25,8 @@ export default class Dashbaord extends Component {
       description: '',
       deadline: '',  
       collaborator: '',
+      color: '#000000',
+      noCollab: false,
       redirectToHome: false, 
     };
     
@@ -47,23 +48,33 @@ export default class Dashbaord extends Component {
     const block = this.state.block;
     const description = this.state.description;
     const deadline = this.state.deadline;
-    const collaborator = this.state.collaborator;
+    var collaborator = this.state.collaborator;
+    const color = this.state.color;
+    const noCollab = this.state.noCollab
 
-    if (block != '' && description != '' && deadline != '' && collaborator != '') {
+    if (block !== '' && description !== '' && deadline !== '' && (collaborator !== '' || noCollab)) {
 
+      if (noCollab) {
+        collaborator = false
+      }
       this.props.addBlock([block,
                            description,
                            deadline,
-                           collaborator]);
+                           collaborator,
+                           color]);
 
       this.setState({
         block: '',
         description: '',
         deadline: '',
         collaborator: '',
+        color: '#000000',
         redirectToHome: true,
       })
     }
+
+    //window.location.reload();
+
   
   }
 
@@ -71,6 +82,11 @@ export default class Dashbaord extends Component {
     const redirectToHome = this.state.redirectToHome;
     if (redirectToHome) {
       return <Redirect to="/dash" />
+
+    }
+    else {
+      //window.location.reload();
+
     }
     return (
       <div>
@@ -97,6 +113,16 @@ export default class Dashbaord extends Component {
                    onChange={this.handleChange}
                    placeholder="Collaborator's Blockstack ID">
             </input>
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   value={this.state.noCollab} 
+                   id="noCollab" 
+                   name="noCollab"
+                   onChange={this.handleChange}></input>
+            <label class="form-check-label" for="noCollab">
+              No collaborator
+            </label>
+            <br></br>
             <label for="date">Deadline</label>
             <input type="date" 
                    className="form-control" 
@@ -104,7 +130,14 @@ export default class Dashbaord extends Component {
                    value={this.state.deadline}
                    onChange={this.handleChange}
                    placeholder="Description"></input>
+            <label for="color">Block color</label>
+            <input type="color" 
+                   name="color" 
+                   className="form-control" 
+                   id="color"
+                   onChange={this.handleChange}></input>
             <input type="submit" className="btn btn-primary" value="Create block"/>
+   
           </form>
         </div>
       </div>
@@ -116,5 +149,7 @@ export default class Dashbaord extends Component {
     this.setState({
       person: new Person(userSession.loadUserData().profile),
     });
+    //window.location.reload();
+
   }
 }

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import '../styles/TableRow.css'
-import { ok } from 'assert';
+import InviteStatus from './InviteStatus'
 
 export default class InviteRow extends Component {
 
   render() {
-    const blockPreviewModel = this.props.preview;
+    const blockModel = this.props.preview;
     console.log("made it to InviteRow");
-    console.log(blockPreviewModel);
+    console.log(blockModel);
     //const { block, description, deadline, owner, invitationId, blockGroupId } = blockPreviewModel.attrs;
-    const { block, description, deadline, owner } = blockPreviewModel.attrs;
+    const { block, description, deadline, owner } = blockModel.attrs;
     return (
       <tr>
         <td>{block}</td>
@@ -18,7 +18,11 @@ export default class InviteRow extends Component {
         <td>{owner}
         </td>
         <td>
-          <a id="blackHref" href="#" onClick={() => this.props.acceptBlock(this.props.preview._id)}>Accept</a>
+          <InviteStatus
+             id={blockModel._id}
+             acceptBlock={this.props.acceptBlock}
+             username={this.props.username}
+             owner={owner} />
         </td>
       </tr>
     );

@@ -3,10 +3,6 @@ import '../styles/BlockTable.css'
 import TableRow from './TableRow'
 
 export default class BlockTable extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
 
     // <th scope="col">#</th>
@@ -20,6 +16,7 @@ export default class BlockTable extends Component {
             <th scope="col">Collaborator(s)</th>
             <th scope="col">Status</th>
             <th scope="col">Remove</th>
+            <th scope="col">Edit</th>
           </tr>
         </thead>
         <tbody>
@@ -27,7 +24,10 @@ export default class BlockTable extends Component {
             <TableRow block={block} 
                       index={i} 
                       removeBlock={this.props.removeBlock}
-                      completeBlock={this.props.completeBlock}/>
+                      completeBlock={this.props.completeBlock}
+                      username={this.props.username}
+                      editBlockName={this.props.editBlockName}
+                      editBlockDesc={this.props.editBlockDesc}/>
           )}
         </tbody>
       </table>

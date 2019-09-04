@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Person
-} from 'blockstack';
+import from 'blockstack';
 
 
 function Pending(props) {
@@ -11,9 +9,9 @@ function Pending(props) {
       <a id="blackHref" data-toggle="collapse" href={"#collapseSubmit" + props.index} aria-expanded="false" aria-controls={"#collapseSubmit" + props.index}>&#10004;</a>
       <div class="collapse" id={"collapseSubmit" + props.index}>
         <div class="card card-body">
-          <textarea type="text" 
-                  className="form-control" 
-                  name="description" 
+          <textarea type="text"
+                  className="form-control"
+                  name="description"
                   value={props.submitMessage}
                   onChange={props.handleChange}
                   placeholder="Enter a message to display on your completed block."></textarea>
@@ -23,7 +21,7 @@ function Pending(props) {
     </div>
   );
 }
-  
+
 
 
 function Complete(props) {
@@ -60,7 +58,7 @@ export default class Status extends Component {
     this.props.completeBlock(this.props.index, this.state.submitMessage);
     this.setState({submitMessage: ''});
   }
-  
+
 
   render() {
     let status;
@@ -68,7 +66,7 @@ export default class Status extends Component {
     if (completed) {
       status = <Complete block={this.props.block} index={this.props.index}/>;
     } else {
-      status = <Pending block={this.props.block} 
+      status = <Pending block={this.props.block}
                         index={this.props.index}
                         submitMessage={this.state.submitMessage}
                         completeBlock = {this.completeBlock}
@@ -76,11 +74,11 @@ export default class Status extends Component {
     }
 
     return (
-      <div> 
+      <div>
         {status}
       </div>
     );
   }
 
- 
+
 }
