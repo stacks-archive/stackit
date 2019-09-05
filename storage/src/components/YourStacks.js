@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Person,
 } from 'blockstack';
-import from 'react-router-dom'
 import '../styles/YourStacks.css'
 import Block from './Block'
 

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import from 'blockstack';
 
 // https://codepen.io/techniq/pen/yVEeOx?editors=0010
 
