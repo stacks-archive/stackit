@@ -2,6 +2,23 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 It's built on Blockstack and is a decentralized application. All your data is stored client-side
 and is safe with you. 
 
+## To run this app on Mac OS
+
+1. Install and run [MongoDB Community edition](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/#install-mongodb-community-edition-with-homebrew)
+
+2. [Install and run Compass(https://docs.mongodb.com/compass/master/install/)].
+3. Install the `radiks-server`
+
+   ```
+   npm install -g radiks-server
+   ```
+
+4. Run `radiks-server`
+
+      By default, Radiks-server will use 'mongodb://localhost:27017/radiks-server' as the MONGODB_URI value. This is suitable for local testing, but in production, you'll want to change the hostname and possible the database name. To do this, you can set a `MONGODB_URI` environment variable on the same machine where you are running the `radiks-server`.
+
+5. Launch Stackit.
+
 ## Available Scripts
 
 In the project directory, you can run:

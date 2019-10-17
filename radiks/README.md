@@ -17,7 +17,7 @@ and is safe with you.
 
       By default, Radiks-server will use 'mongodb://localhost:27017/radiks-server' as the MONGODB_URI value. This is suitable for local testing, but in production, you'll want to change the hostname and possible the database name. To do this, you can set a `MONGODB_URI` environment variable on the same machine where you are running the `radiks-server`.
 
-5. 
+5. Launch Stackit.
 
 ## Available Scripts
 
