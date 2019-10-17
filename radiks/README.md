@@ -6,7 +6,7 @@ and is safe with you.
 
 1. Install and run [MongoDB Community edition](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/#install-mongodb-community-edition-with-homebrew)
 
-2. [Install and run Compass](https://docs.mongodb.com/compass/master/install/)].
+2. [Install and run Compass](https://docs.mongodb.com/compass/master/install/).
 3. Install the `radiks-server`
 
    ```
