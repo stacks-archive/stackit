@@ -113,24 +113,24 @@ export default class CreateBlock extends Component {
                    onChange={this.handleChange}
                    placeholder="Collaborator's Blockstack ID">
             </input>
-            <input class="form-check-input" 
+            <input className="form-check-input" 
                    type="checkbox" 
                    value={this.state.noCollab} 
                    id="noCollab" 
                    name="noCollab"
                    onChange={this.handleChange}></input>
-            <label class="form-check-label" for="noCollab">
+            <label className="form-check-label" htmlFor="noCollab">
               No collaborator
             </label>
             <br></br>
-            <label for="date">Deadline</label>
+            <label htmlFor="date">Deadline</label>
             <input type="date" 
                    className="form-control" 
                    name="deadline" 
                    value={this.state.deadline}
                    onChange={this.handleChange}
                    placeholder="Description"></input>
-            <label for="color">Block color</label>
+            <label htmlFor="color">Block color</label>
             <input type="color" 
                    name="color" 
                    className="form-control" 

@@ -12,7 +12,7 @@
   "author": "Sahana Srinivasan",
   "license": "MIT",
   "dependencies": {
-    "blockstack": "^19.2.2",
+    "blockstack": "^19.3.0",
     "jquery": "^3.4.1",
     "radiks": "^0.3.0-beta.1",
     "react": "^16.8.6",
@@ -42,7 +42,13 @@
     ]
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^1.4.2",
+    "@typescript-eslint/parser": "^1.4.2",
+    "ajv": "^6.10.2",
     "bootstrap": "^4.3.1",
-    "react-test-renderer": "^16.8.6"
+    "eslint-import-resolver-typescript": "^1.1.1",
+    "popper.js": "^1.16.0",
+    "react-test-renderer": "^16.8.6",
+    "typescript": "^3.3.3333"
   }
 }
