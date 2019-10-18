@@ -53,6 +53,7 @@ export default class App extends Component {
     const { userSession } = getConfig();
     if (userSession.isSignInPending()) {
       await userSession.handlePendingSignIn();
+      await User.createWithCurrentUser();
       window.location = '/';
     }
   }
